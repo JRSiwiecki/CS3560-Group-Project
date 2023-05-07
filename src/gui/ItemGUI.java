@@ -308,20 +308,37 @@ public class ItemGUI
 //            JOptionPane.showMessageDialog(null, "Student: [" + tempStudent.getName() + "] successfully updated.");
 //        });
         
-//        // Delete item
-//        deleteButton.addActionListener(e -> {
-//        	Student tempStudent = new Student();
-//            
-//            tempStudent.setBroncoId(broncoIdField.getText());
-//            tempStudent.setName(nameField.getText());
-//            tempStudent.setCourse(courseField.getText());
-//     
-//            StudentDAO.deleteStudent(tempStudent);
-//            
-//            clearFields();
-//            
-//            JOptionPane.showMessageDialog(null, "Student: [" + tempStudent.getName() + "] successfully deleted.");
-//        });
+        // Delete item
+        deleteButton.addActionListener(e -> {
+        	
+            if (bookButton.isSelected())
+            {
+            	Book tempBook = BookDAO.readBook(titleField.getText());
+            	
+            	BookDAO.deleteBook(tempBook);
+            	
+            	clearFields();
+            	
+            	JOptionPane.showMessageDialog(null, "Book: [" + tempBook.getTitle() + "] successfully deleted.");
+            }
+            
+            else if (documentaryButton.isSelected())
+            {
+            	Documentary tempDocumentary = DocumentaryDAO.readDocumentary(titleField.getText());
+            	
+            	DocumentaryDAO.deleteDocumentary(tempDocumentary);
+            	
+            	clearFields();
+            	
+            	JOptionPane.showMessageDialog(null, "Documentary: [" + tempDocumentary.getTitle() + "] successfully deleted.");
+            }
+            
+            else 
+        	{
+        		JOptionPane.showMessageDialog(null, "ERROR: Please select Book or Documentary.");
+        		return;
+        	}    
+        });
     }
 	
 	public void showWindow()

@@ -112,5 +112,41 @@ public class BookDAO
 			factory.close();
 		}
 	}
+	
+	public static void deleteBook(Book book)
+	{
+		SessionFactory factory = new Configuration()
+				.configure("hibernate.cfg.xml")
+				.addAnnotatedClass(Author.class)
+				.addAnnotatedClass(Book.class)
+				.addAnnotatedClass(Creator.class)
+				.addAnnotatedClass(Director.class)
+				.addAnnotatedClass(Documentary.class)
+				.addAnnotatedClass(Item.class)
+				.addAnnotatedClass(Loan.class)
+				.addAnnotatedClass(Student.class)
+				.buildSessionFactory();
+
+		Session session = factory.getCurrentSession();
+
+		try
+		{
+			session.beginTransaction();
+			
+			// Remember that the ItemID is the BookID - 1.
+			Item tempItem = session.get(Item.class, book.getCode() - 1);
+					
+			session.delete(session.get(Book.class, book.getCode()));
+			session.delete(session.get(Item.class, tempItem.getCode()));
+			
+			session.getTransaction().commit();
+		}
+		
+		finally
+		{
+			session.close();
+			factory.close();
+		}
+	}
 }
 
