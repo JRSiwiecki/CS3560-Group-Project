@@ -8,9 +8,12 @@ public class Student
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "students_seq")
-    @SequenceGenerator(name = "students_seq", sequenceName = "students_broncoId_seq", allocationSize = 1)
-    @Column(name = "bronco_id")
-	private int broncoId;
+    @SequenceGenerator(name = "students_seq", sequenceName = "students_library_id_seq", allocationSize = 1)
+    @Column(name = "library_id")
+	private int libraryId;
+	
+	@Column(name="bronco_id")
+	private String broncoId;
 	
 	@Column(name="name")
 	private String name;
@@ -18,7 +21,7 @@ public class Student
 	@Column(name="course")
 	private String course;
 	
-	public Student(int broncoId, String name, String course)
+	public Student(String broncoId, String name, String course)
 	{
 		this.broncoId = broncoId;
 		this.name = name;
@@ -30,11 +33,11 @@ public class Student
 		
 	}
 	
-	public int getBroncoId()
+	public String getBroncoId()
 	{
 		return broncoId;
 	}
-	public void setBroncoId(int broncoId)
+	public void setBroncoId(String broncoId)
 	{
 		this.broncoId = broncoId;
 	}
@@ -58,7 +61,7 @@ public class Student
 	@Override
 	public String toString()
 	{
-		return "Student [broncoId=" + broncoId + ", name=" + name + ", "
+		return "Student [libraryId=" + libraryId + ", broncoId=" + broncoId + ", name=" + name + ", "
 				+ "course=" + course + "]";
 	}
 	

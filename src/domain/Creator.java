@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="creators")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Creator
 {
 	@Id

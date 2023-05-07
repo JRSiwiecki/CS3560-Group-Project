@@ -1,7 +1,7 @@
 package domain;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="authors")
@@ -13,9 +13,9 @@ public class Author extends Creator
 	@Column(name="subject")
 	private String subject;
 	
-	@OneToMany(mappedBy="books",
+	@OneToMany(mappedBy="author",
 			cascade= {CascadeType.PERSIST})
-	private ArrayList<Book> books;
+	private List<Book> books;
 	
 	public Author(String name, String nationality, String subject)
 	{
@@ -50,12 +50,12 @@ public class Author extends Creator
 		this.subject = subject;
 	}
 	
-	public ArrayList<Book> getBooks()
+	public List<Book> getBooks()
 	{
 		return books;
 	}
 
-	public void setBooks(ArrayList<Book> books)
+	public void setBooks(List<Book> books)
 	{
 		this.books = books;
 	}

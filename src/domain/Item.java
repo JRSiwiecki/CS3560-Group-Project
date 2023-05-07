@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="items")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Item
 {
 	@Id
