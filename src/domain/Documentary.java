@@ -7,8 +7,6 @@ import java.sql.Date;
 @Table(name="documentaries")
 public class Documentary extends Item
 {
-	@Column(name="item_code")
-	private int itemCode;
 	
 	// length is an integer representing time in minutes
 	@Column(name="length")
@@ -27,7 +25,6 @@ public class Documentary extends Item
 			Loan currentLoan)
 	{
 		super(code, title, description, location, dailyPrice, isOnLoan, currentLoan);
-		this.itemCode = this.getCode();
 		this.length = length;
 		this.releaseDate = releaseDate;
 		this.director = director;
@@ -36,17 +33,6 @@ public class Documentary extends Item
 	public Documentary()
 	{
 		super();
-		this.itemCode = this.getCode();
-	}
-	
-	public int getItemCode()
-	{
-		return itemCode;
-	}
-
-	public void setItemCode(int itemCode)
-	{
-		this.itemCode = itemCode;
 	}
 
 	public int getLength()

@@ -7,8 +7,6 @@ import java.util.List;
 @Table(name="directors")
 public class Director extends Creator
 {
-	@Column(name="creator_id")
-	private int creator_id;
 	
 	@Column(name="style")
 	private String style;
@@ -20,24 +18,12 @@ public class Director extends Creator
 	public Director(String name, String nationality, String style)
 	{
 		super(name, nationality);
-		this.creator_id = this.getId();
 		this.style = style;
 	}
 	
 	public Director()
 	{
 		super();
-		this.creator_id = this.getId();
-	}
-	
-	public int getCreator_id()
-	{
-		return creator_id;
-	}
-
-	public void setCreator_id(int creator_id)
-	{
-		this.creator_id = creator_id;
 	}
 
 	public String getStyle()

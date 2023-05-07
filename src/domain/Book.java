@@ -7,8 +7,6 @@ import java.sql.Date;
 @Table(name="books")
 public class Book extends Item
 {
-	@Column(name="item_code")
-	private int itemCode;
 	
 	@Column(name="pages")
 	private int pages;
@@ -29,7 +27,6 @@ public class Book extends Item
 			Loan currentLoan)
 	{
 		super(code, title, description, location, dailyPrice, isOnLoan, currentLoan);
-		itemCode = this.getCode();
 		this.pages = pages;
 		this.publisher = publisher;
 		this.publicationDate = publicationDate;
@@ -39,17 +36,6 @@ public class Book extends Item
 	public Book()
 	{
 		super();
-		itemCode = this.getCode();
-	}
-	
-	public int getItemCode()
-	{
-		return itemCode;
-	}
-
-	public void setItemCode(int itemCode)
-	{
-		this.itemCode = itemCode;
 	}
 
 	public int getPages()
