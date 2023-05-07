@@ -3,12 +3,7 @@ package gui;
 import api.*;
 import domain.*;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class StudentGUI
 {
@@ -25,7 +20,7 @@ public class StudentGUI
 		frame = new JFrame("Student");
 		frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		frame.setResizable(false);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		// Create components and add them to the JFrame
 		JPanel panel = new JPanel();
