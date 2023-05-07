@@ -28,7 +28,7 @@ public class ItemGUI
     
 	public ItemGUI()
 	{
-		frame = new JFrame("Item");
+		frame = new JFrame("Item Management");
 		frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -153,7 +153,7 @@ public class ItemGUI
         frame.getContentPane().add(panel);
 
         
-//        // Create student
+//        // Create item
 //        createButton.addActionListener(e -> {
 //        	String broncoId = broncoIdField.getText();
 //            String name = nameField.getText();
@@ -166,7 +166,7 @@ public class ItemGUI
 //            JOptionPane.showMessageDialog(null, "Student: [" + name + "] successfully added.");
 //        });
 //        
-//        // Get student
+//        // read item
 //        readButton.addActionListener(e -> {
 //        	String name = nameField.getText();
 //        	
@@ -183,7 +183,7 @@ public class ItemGUI
 //        	courseField.setText(tempStudent.getCourse());    	
 //        });
 //        
-//        // Update student
+//        // Update item
 //        updateButton.addActionListener(e -> {
 //        	Student tempStudent = new Student();
 //            
@@ -198,7 +198,7 @@ public class ItemGUI
 //            JOptionPane.showMessageDialog(null, "Student: [" + tempStudent.getName() + "] successfully updated.");
 //        });
 //        
-//        // Delete student
+//        // Delete item
 //        deleteButton.addActionListener(e -> {
 //        	Student tempStudent = new Student();
 //            

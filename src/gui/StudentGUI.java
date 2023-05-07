@@ -17,7 +17,7 @@ public class StudentGUI
 	
 	public StudentGUI()
 	{
-		frame = new JFrame("Student");
+		frame = new JFrame("Student Management");
 		frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -87,7 +87,7 @@ public class StudentGUI
             JOptionPane.showMessageDialog(null, "Student: [" + name + "] successfully added.");
         });
         
-        // Get student
+        // Read student
         readButton.addActionListener(e -> {
         	String name = nameField.getText();
         	

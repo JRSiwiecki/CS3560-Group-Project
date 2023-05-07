@@ -15,7 +15,7 @@ public class MainGUI {
     private JButton studentButton;
 
     public MainGUI() {
-        frame = new JFrame("Main");
+        frame = new JFrame("Library Management System");
         frame.setSize(500, 500);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
