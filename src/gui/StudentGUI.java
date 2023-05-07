@@ -11,6 +11,7 @@ public class StudentGUI
 	private static final int WINDOW_WIDTH = 1000;
 	private static final int WINDOW_HEIGHT = 600;
 	
+	JTextField libraryIdField;
 	JTextField broncoIdField;
     JTextField nameField;
     JTextField courseField;
@@ -27,12 +28,13 @@ public class StudentGUI
 		panel.setLayout(null);
         
         // Create labels
-        JLabel broncoIdLabel = new JLabel("BroncoID");
+        JLabel libraryIdLabel = new JLabel("Library ID");
+		JLabel broncoIdLabel = new JLabel("Bronco ID");
         JLabel nameLabel = new JLabel("Name");
         JLabel courseLabel = new JLabel("Course");
-
         
         // Create text fields
+        libraryIdField = new JTextField(20);
         broncoIdField = new JTextField(20);
         nameField = new JTextField(20);
         courseField = new JTextField(20);
@@ -43,21 +45,28 @@ public class StudentGUI
         JButton updateButton = new JButton("Update");
         JButton deleteButton = new JButton("Delete");
         
+        // Add library id components
+        libraryIdLabel.setBounds(25, 25, 100, 25);
+        libraryIdField.setBounds(25, 50, 300 ,25);
+        panel.add(libraryIdLabel);
+        panel.add(libraryIdField);
+        libraryIdField.setEnabled(false);
+        
         // Add name components
-        nameLabel.setBounds(25, 25, 100, 25);
-        nameField.setBounds(25, 50, 925, 25);
+        nameLabel.setBounds(25, 100, 100, 25);
+        nameField.setBounds(25, 125, 925, 25);
         panel.add(nameLabel);
         panel.add(nameField);
         
         // Add broncoId components
-        broncoIdLabel.setBounds(25, 100, 100, 25);
-        broncoIdField.setBounds(25, 125, 300, 25);
+        broncoIdLabel.setBounds(25, 175, 100, 25);
+        broncoIdField.setBounds(25, 200, 300, 25);
         panel.add(broncoIdLabel);
         panel.add(broncoIdField);
         
         // Add course components
-        courseLabel.setBounds(350, 100, 100, 25);
-        courseField.setBounds(350, 125, 600, 25);
+        courseLabel.setBounds(350, 175, 100, 25);
+        courseField.setBounds(350, 200, 600, 25);
         panel.add(courseLabel);
         panel.add(courseField);
            
@@ -99,6 +108,7 @@ public class StudentGUI
         		return;
         	}
         	
+        	libraryIdField.setText(String.valueOf(tempStudent.getLibraryId())); 
         	broncoIdField.setText(tempStudent.getBroncoId());
         	nameField.setText(tempStudent.getName());
         	courseField.setText(tempStudent.getCourse());    	
@@ -108,6 +118,7 @@ public class StudentGUI
         updateButton.addActionListener(e -> {
         	Student tempStudent = new Student();
             
+        	tempStudent.setLibraryId(Integer.parseInt(libraryIdField.getText())); 
         	tempStudent.setBroncoId(broncoIdField.getText());
         	tempStudent.setName(nameField.getText());
         	tempStudent.setCourse(courseField.getText());
@@ -123,7 +134,8 @@ public class StudentGUI
         deleteButton.addActionListener(e -> {
         	Student tempStudent = new Student();
             
-            tempStudent.setBroncoId(broncoIdField.getText());
+            tempStudent.setLibraryId(Integer.parseInt(libraryIdField.getText())); 
+        	tempStudent.setBroncoId(broncoIdField.getText());
             tempStudent.setName(nameField.getText());
             tempStudent.setCourse(courseField.getText());
      
@@ -142,6 +154,7 @@ public class StudentGUI
 	
 	public void clearFields()
 	{
+		libraryIdField.setText("");
 		broncoIdField.setText("");
         nameField.setText("");
         courseField.setText("");
