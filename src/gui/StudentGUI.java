@@ -67,10 +67,10 @@ public class StudentGUI
         panel.add(courseField);
            
         // Add buttons to panel
-        createButton.setBounds(500, 500, 75, 30);
-        readButton.setBounds(600, 500, 75, 30);
-        updateButton.setBounds(700, 500, 75, 30);
-        deleteButton.setBounds(800, 500, 75, 30);
+        createButton.setBounds(575, 500, 75, 30);
+        readButton.setBounds(675, 500, 75, 30);
+        updateButton.setBounds(775, 500, 75, 30);
+        deleteButton.setBounds(875, 500, 75, 30);
         panel.add(createButton);
         panel.add(readButton);
         panel.add(updateButton);
