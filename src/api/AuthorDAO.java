@@ -80,7 +80,7 @@ public class AuthorDAO
 			
 			@SuppressWarnings("unchecked")
 			List<Author> authors = session.createQuery(hql)
-					.setParameter("name", tempAuthor.getName())
+					.setParameter("title", tempAuthor.getName())
 					.list();
 			
 			tempAuthor = (authors.isEmpty()) ? null : authors.get(0);
