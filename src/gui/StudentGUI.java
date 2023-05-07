@@ -42,18 +42,18 @@ public class StudentGUI
         JButton readButton = new JButton("Read");
         JButton updateButton = new JButton("Update");
         JButton deleteButton = new JButton("Delete");
-
-        // Add broncoId components
-        broncoIdLabel.setBounds(25, 100, 100, 25);
-        broncoIdField.setBounds(25, 125, 300, 25);
-        panel.add(broncoIdLabel);
-        panel.add(broncoIdField);
         
         // Add name components
         nameLabel.setBounds(25, 25, 100, 25);
         nameField.setBounds(25, 50, 925, 25);
         panel.add(nameLabel);
         panel.add(nameField);
+        
+        // Add broncoId components
+        broncoIdLabel.setBounds(25, 100, 100, 25);
+        broncoIdField.setBounds(25, 125, 300, 25);
+        panel.add(broncoIdLabel);
+        panel.add(broncoIdField);
         
         // Add course components
         courseLabel.setBounds(350, 100, 100, 25);

@@ -1,5 +1,7 @@
 package domain;
 
+
+
 import javax.persistence.*;
 
 @Entity
@@ -73,6 +75,11 @@ public class Student
 	{
 		return "Student [libraryId=" + libraryId + ", broncoId=" + broncoId + ", name=" + name + ", "
 				+ "course=" + course + "]";
+	}
+	
+	public boolean isActive()
+	{
+		return false;
 	}
 	
 	

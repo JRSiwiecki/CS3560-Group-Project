@@ -8,11 +8,10 @@ public class MainGUI {
     private JFrame frame;
     private JPanel panel;
 
+    private JButton loanButton;
     private JButton authorButton;
-    private JButton bookButton;
     private JButton directorButton;
     private JButton itemButton;
-    private JButton loanButton;
     private JButton studentButton;
 
     public MainGUI() {
@@ -23,21 +22,21 @@ public class MainGUI {
 
         panel = new JPanel();
 
-        authorButton = new JButton("Author");
+        loanButton = new JButton("Loan");
 //        authorButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                LoanGUI loanGUI = new LoanGUI();
+//                loanGUI.showWindow();
+//            }
+//        });
+
+        authorButton = new JButton("Author");
+//        bookButton.addActionListener(new ActionListener() {
 //            @Override
 //            public void actionPerformed(ActionEvent e) {
 //                AuthorGUI authorGUI = new AuthorGUI();
 //                authorGUI.showWindow();
-//            }
-//        });
-
-        bookButton = new JButton("Book");
-//        bookButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                BookGUI bookGUI = new BookGUI();
-//                bookGUI.showWindow();
 //            }
 //        });
 
@@ -51,13 +50,13 @@ public class MainGUI {
 //        });
 
         itemButton = new JButton("Item");
-//        itemButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                ItemGUI itemGUI = new ItemGUI();
-//                itemGUI.showWindow();
-//            }
-//        });
+        itemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ItemGUI itemGUI = new ItemGUI();
+                itemGUI.showWindow();
+            }
+        });
 
         loanButton = new JButton("Loan");
 //        loanButton.addActionListener(new ActionListener() {
@@ -77,8 +76,8 @@ public class MainGUI {
             }
         });
 
+        panel.add(loanButton);
         panel.add(authorButton);
-        panel.add(bookButton);
         panel.add(directorButton);
         panel.add(itemButton);
         panel.add(loanButton);
