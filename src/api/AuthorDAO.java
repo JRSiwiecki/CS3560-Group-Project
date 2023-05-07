@@ -73,9 +73,9 @@ public class AuthorDAO
 			tempAuthor.setName(name);
 			
 			// need to use the Class name, not table name
-			// ie uppercase Customer like the class
-			// not lowercase customers like the table in pgAdmin
-			String hql = "FROM authors WHERE name=:name";
+			// ie uppercase Author like the class
+			// not lowercase authors like the table in pgAdmin
+			String hql = "FROM Author WHERE name=:name";
 			
 			
 			@SuppressWarnings("unchecked")
@@ -117,8 +117,8 @@ public class AuthorDAO
 		{
 			session.beginTransaction();
 			
-			// Retrieve the customer from the database using their name
-			String hql = "FROM Customer WHERE name=:name";
+			// Retrieve the author from the database using their name
+			String hql = "FROM Author WHERE name=:name";
 			Author tempAuthor = (Author) session.createQuery(hql)
 			                                    .setParameter("name", author.getName())
 			                                    .uniqueResult();
@@ -128,7 +128,7 @@ public class AuthorDAO
 			// Update the author object with the correct ID
 			author.setId(tempAuthor.getId());
 			
-			hql = "UPDATE Customer SET name=:name, phone=:phone, email=:email WHERE id=:id";
+			hql = "UPDATE Author SET name=:name, phone=:phone, email=:email WHERE id=:id";
 			
 			session.createQuery(hql)
 				.setParameter("name", author.getName())
@@ -168,7 +168,7 @@ public class AuthorDAO
 			session.beginTransaction();
 			
 			// Retrieve the customer from the database using their name
-			String hql = "FROM authors WHERE name=:name";
+			String hql = "FROM Author WHERE name=:name";
 			Author tempAuthor = (Author) session.createQuery(hql)
 			                                    .setParameter("name", author.getName())
 			                                    .uniqueResult();

@@ -41,5 +41,20 @@ public class StudentDAO
 			factory.close();
 		}
 	}
+	
+	public static Student readStudent(String name)
+	{
+		return new Student();
+	}
+	
+	public static void updateStudent(Student student)
+	{
+		return;
+	}
+	
+	public static void deleteStudent(Student student)
+	{
+		return;
+	}
 }
 

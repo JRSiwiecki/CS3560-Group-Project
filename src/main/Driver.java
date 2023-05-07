@@ -14,5 +14,8 @@ public class Driver
 		
 //		DirectorDAO.createDirector("Spike Lee", "American", "Politics");
 //		DirectorDAO.createDirector("James Cameron", "Canadian", "Action");
+		
+//		BookDAO.createBook("", null, null, 0, 0, null, null, null);
+//		BookDAO.createBook("", null, null, 0, 0, null, null, null);
 	}
 }
