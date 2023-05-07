@@ -21,10 +21,9 @@ public class Documentary extends Item
 	
 	public Documentary(int code, String title, String description, 
 			String location, double dailyPrice, boolean isOnLoan,
-			int length, Date releaseDate, Creator director,
-			Loan currentLoan)
+			int length, Date releaseDate, Creator director)
 	{
-		super(code, title, description, location, dailyPrice, isOnLoan, currentLoan);
+		super(code, title, description, location, dailyPrice, isOnLoan);
 		this.length = length;
 		this.releaseDate = releaseDate;
 		this.director = director;
@@ -66,9 +65,9 @@ public class Documentary extends Item
 		return "Documentary [code=" + this.getCode() + ", title=" + this.getTitle() 
 				+ 	", description=" + this.getDescription() + ", location=" + this.getLocation()
 				+ 	", dailyPrice=" + this.getDailyPrice() + ", isOnLoan=" + this.getIsOnLoan() 
-				+  ", currentLoan=" + this.getCurrentLoan().toString() + ", length=" + length 
-				+ ", releaseDate=" + releaseDate 
-				+ ", director=" + director.toString() + "]";
+				+   ", length=" + length 
+				+   ", releaseDate=" + releaseDate 
+				+   ", director=" + director.toString() + "]";
 	}
 	
 	

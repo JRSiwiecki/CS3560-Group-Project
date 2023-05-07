@@ -146,5 +146,46 @@ public class AuthorDAO
 			factory.close();
 		}
 	}
+	
+	public void deleteAuthor(Author author)
+	{
+		SessionFactory factory = new Configuration()
+				.configure("hibernate.cfg.xml")
+				.addAnnotatedClass(Author.class)
+				.addAnnotatedClass(Book.class)
+				.addAnnotatedClass(Creator.class)
+				.addAnnotatedClass(Director.class)
+				.addAnnotatedClass(Documentary.class)
+				.addAnnotatedClass(Item.class)
+				.addAnnotatedClass(Loan.class)
+				.addAnnotatedClass(Student.class)
+				.buildSessionFactory();
+
+		Session session = factory.getCurrentSession();
+
+		try
+		{
+			session.beginTransaction();
+			
+			// Retrieve the customer from the database using their name
+			String hql = "FROM authors WHERE name=:name";
+			Author tempAuthor = (Author) session.createQuery(hql)
+			                                    .setParameter("name", author.getName())
+			                                    .uniqueResult();
+
+			// Update the customer object with the correct ID
+			author.setId(tempAuthor.getId());
+			
+			session.delete(session.get(Author.class, author.getId()));
+			
+			session.getTransaction().commit();
+		}
+		
+		finally
+		{
+			session.close();
+			factory.close();
+		}
+	}
 }
 

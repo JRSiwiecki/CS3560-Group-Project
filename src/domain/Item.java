@@ -27,14 +27,9 @@ public class Item
 	
 	@Column(name="is_on_loan")
 	private boolean isOnLoan;
-	
-	@OneToOne(cascade=CascadeType.PERSIST)
-	@JoinColumn(name="loan_id")
-	private Loan currentLoan;
 
 	public Item (int code, String title, String description, 
-			String location, double dailyPrice, boolean isOnLoan,
-			Loan currentLoan)
+			String location, double dailyPrice, boolean isOnLoan)
 	{
 		this.code = code;
 		this.title = title;
@@ -42,7 +37,6 @@ public class Item
 		this.location = location;
 		this.dailyPrice = dailyPrice;
 		this.isOnLoan = isOnLoan;
-		this.currentLoan = currentLoan;
 	}
 	
 	public Item()
@@ -109,24 +103,13 @@ public class Item
 	{
 		this.isOnLoan = isOnLoan;
 	}
-
-	public Loan getCurrentLoan()
-	{
-		return currentLoan;
-	}
-
-	public void setCurrentLoan(Loan currentLoan)
-	{
-		this.currentLoan = currentLoan;
-	}
-
+	
 	@Override
 	public String toString()
 	{
 		return "Item [code=" + code + ", title=" + title + ", "
 				+ "description=" + description + ", location=" + location
-				+ ", dailyPrice=" + dailyPrice + ", isOnLoan=" + isOnLoan + 
-				", currentLoan=" + currentLoan + "]";
+				+ ", dailyPrice=" + dailyPrice + ", isOnLoan=" + isOnLoan + "]";
 	}
 	
 	

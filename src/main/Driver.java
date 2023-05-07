@@ -6,13 +6,13 @@ public class Driver
 {
 	public static void main(String[] args)
 	{
-		// CreateStudent.createStudent("014758458", "Joseph", "CS");
-		// CreateStudent.createStudent("014153815", "David", "CS");
+//		StudentDAO.createStudent("014851590", "Abdiel", "CS");
+//		StudentDAO.createStudent("014456741", "Jonathan", "CS");
 		
-		// CreateAuthor.createAuthor("William Shakespeare", "British", "Playwright");
-		// CreateAuthor.createAuthor("Edgar Allan Poe", "American", "Horror");
+//		AuthorDAO.createAuthor("George Orwell", "British", "Politics");
+//		AuthorDAO.createAuthor("Virginia Woolf", "British", "Stream of Consciousness");
 		
-		CreateDirector.createDirector("Quentin Tarantino", "American", "Action");
-		CreateDirector.createDirector("Tim Burton", "American", "Animation");
+//		DirectorDAO.createDirector("Spike Lee", "American", "Politics");
+//		DirectorDAO.createDirector("James Cameron", "Canadian", "Action");
 	}
 }

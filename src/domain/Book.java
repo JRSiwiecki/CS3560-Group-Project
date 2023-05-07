@@ -23,10 +23,9 @@ public class Book extends Item
 	
 	public Book(int code, String title, String description, 
 			String location, double dailyPrice, boolean isOnLoan,
-			int pages, String publisher, Date publicationDate, Creator author,
-			Loan currentLoan)
+			int pages, String publisher, Date publicationDate, Author author)
 	{
-		super(code, title, description, location, dailyPrice, isOnLoan, currentLoan);
+		super(code, title, description, location, dailyPrice, isOnLoan);
 		this.pages = pages;
 		this.publisher = publisher;
 		this.publicationDate = publicationDate;
@@ -77,10 +76,10 @@ public class Book extends Item
 		return "Book [code=" + this.getCode() + ", title=" + this.getTitle() 
 				+ 	", description=" + this.getDescription() + ", location=" + this.getLocation()
 				+ 	", dailyPrice=" + this.getDailyPrice() + ", isOnLoan=" + this.getIsOnLoan() 
-				+  ", currentLoan=" + this.getCurrentLoan().toString() + ", pages=" + pages 
-				+ ", publisher=" + publisher 
-				+ ", publicationDate=" + publicationDate
-				+ ", author=" + author.toString() + "]";
+				+   ", pages=" + pages 
+				+   ", publisher=" + publisher 
+				+   ", publicationDate=" + publicationDate
+				+   ", author=" + author.toString() + "]";
 	}
 	
 	

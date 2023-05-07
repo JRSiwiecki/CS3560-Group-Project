@@ -11,9 +11,8 @@ import org.hibernate.cfg.Configuration;
 public class BookDAO 
 {
 	public static void createBook(int code, String title, String description, 
-			String location, double dailyPrice, boolean isOnLoan,
-			int pages, String publisher, Date publicationDate, Creator author,
-			Loan currentLoan, Author author) 
+			String location, double dailyPrice,
+			int pages, String publisher, Date publicationDate, Author author) 
 	{
 		SessionFactory factory = new Configuration()
 								.configure("hibernate.cfg.xml")
@@ -33,13 +32,8 @@ public class BookDAO
 		{
 			session.beginTransaction();
 			
-			Loan tempLoan = new Loan();
-			
-			// Note that doing this will have the Item ID 
-			// be bookID - 1. I can't figure out a way around this.
-			Item tempItem = new Item(code, title, description, location, dailyPrice, isOnLoan, tempLoan);
-			Book tempBook = new Book(code, title, description, location, dailyPrice, 
-					isOnLoan, pages, publisher, publicationDate, author, tempLoan);
+			Item tempItem = new Item();
+			Book tempBook = new Book();
 			
 			session.save(tempItem);
 			session.save(tempBook);
