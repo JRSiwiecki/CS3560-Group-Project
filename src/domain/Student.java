@@ -1,28 +1,28 @@
 package domain;
 
-import java.util.ArrayList;
+import javax.persistence.*;
 
+@Entity
+@Table(name="students")
 public class Student
 {
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "students_seq")
+    @SequenceGenerator(name = "students_seq", sequenceName = "students_broncoId_seq", allocationSize = 1)
+    @Column(name = "bronco_id")
 	private int broncoId;
-	private String name;
-	private String course;
-	private ArrayList<Loan> loans;
 	
-	public Student(int broncoId, String name, String course, ArrayList<Loan> loans)
-	{
-		this.broncoId = broncoId;
-		this.name = name;
-		this.course = course;
-		this.loans = loans;
-	}
+	@Column(name="name")
+	private String name;
+	
+	@Column(name="course")
+	private String course;
 	
 	public Student(int broncoId, String name, String course)
 	{
 		this.broncoId = broncoId;
 		this.name = name;
 		this.course = course;
-		loans = new ArrayList<Loan>();
 	}
 	
 	public Student()
@@ -54,30 +54,12 @@ public class Student
 	{
 		this.course = course;
 	}
-	public ArrayList<Loan> getLoans()
-	{
-		return loans;
-	}
-	public void setLoans(ArrayList<Loan> loans)
-	{
-		this.loans = loans;
-	}
-	
-	public void addLoan(Loan loan)
-	{
-		loans.add(loan);
-	}
-	
-	public void removeLoan(Loan loan)
-	{
-		loans.remove(loan);
-	}
 
 	@Override
 	public String toString()
 	{
 		return "Student [broncoId=" + broncoId + ", name=" + name + ", "
-				+ "course=" + course + ", loans=" + loans.toString() + "]";
+				+ "course=" + course + "]";
 	}
 	
 	

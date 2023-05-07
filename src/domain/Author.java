@@ -1,5 +1,7 @@
 package domain;
 
+import javax.persistence.*;
+
 public class Author extends Creator
 {
 	private String subject;

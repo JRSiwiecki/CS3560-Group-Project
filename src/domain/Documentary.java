@@ -1,17 +1,19 @@
 package domain;
 
+import javax.persistence.*;
 import java.sql.Date;
-import java.time.Duration;
 
 public class Documentary extends Item
 {
-	private Duration length;
+	
+	// length is an integer representing time in minutes
+	private int length;
 	private Date releaseDate;
 	private Creator director;
 	
 	public Documentary(int code, String title, String description, 
 			String location, double dailyPrice, BorrowStatus status,
-			Duration length, Date releaseDate, Creator director,
+			int length, Date releaseDate, Creator director,
 			Loan currentLoan)
 	{
 		super(code, title, description, location, dailyPrice, status, currentLoan);
@@ -25,11 +27,11 @@ public class Documentary extends Item
 		super();
 	}
 	
-	public Duration getLength()
+	public int getLength()
 	{
 		return length;
 	}
-	public void setLength(Duration length)
+	public void setLength(int length)
 	{
 		this.length = length;
 	}

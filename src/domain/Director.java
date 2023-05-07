@@ -1,5 +1,7 @@
 package domain;
 
+import javax.persistence.*;
+
 public class Director extends Creator
 {
 	private String style;

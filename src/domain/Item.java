@@ -1,5 +1,7 @@
 package domain;
 
+import javax.persistence.*;
+
 public class Item
 {
 	private int code;

@@ -1,5 +1,6 @@
 package domain;
 
+import javax.persistence.*;
 import java.sql.Date;
 
 public class Book extends Item

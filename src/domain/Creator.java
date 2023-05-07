@@ -1,5 +1,7 @@
 package domain;
 
+import javax.persistence.*;
+
 public class Creator
 {
 	private String name;
