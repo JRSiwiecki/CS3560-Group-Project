@@ -96,7 +96,7 @@ public class BookDAO
 			
 			@SuppressWarnings("unchecked")
 			List<Book> books = session.createQuery(hql)
-					.setParameter("name", tempBook.getTitle())
+					.setParameter("title", tempBook.getTitle())
 					.list();
 			
 			tempBook = (books.isEmpty()) ? null : books.get(0);
