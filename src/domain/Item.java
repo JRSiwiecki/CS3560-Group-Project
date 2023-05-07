@@ -2,23 +2,37 @@ package domain;
 
 import javax.persistence.*;
 
+@Entity
+@Table(name="items")
 public class Item
 {
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "items_seq")
+    @SequenceGenerator(name = "items_seq", sequenceName = "items_code_seq", allocationSize = 1)
+    @Column(name = "code")
 	private int code;
-	private String title;
-	private String description;
-	private String location;
-	private double dailyPrice;
-	private BorrowStatus status;
-	private Loan currentLoan;
 	
-	enum BorrowStatus {
-		BORROWED,
-		AVAILABLE
-	}
+	@Column(name="title")
+	private String title;
+	
+	@Column(name="description")
+	private String description;
+	
+	@Column(name="location")
+	private String location;
+	
+	@Column(name="daily_price")
+	private double dailyPrice;
+	
+	@Column(name="is_on_loan")
+	private boolean isOnLoan;
+	
+	@OneToOne(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="loan_id")
+	private Loan currentLoan;
 
 	public Item (int code, String title, String description, 
-			String location, double dailyPrice, BorrowStatus status,
+			String location, double dailyPrice, boolean isOnLoan,
 			Loan currentLoan)
 	{
 		this.code = code;
@@ -26,7 +40,7 @@ public class Item
 		this.description = description;
 		this.location = location;
 		this.dailyPrice = dailyPrice;
-		this.status = status;
+		this.isOnLoan = isOnLoan;
 		this.currentLoan = currentLoan;
 	}
 	
@@ -85,14 +99,14 @@ public class Item
 		this.dailyPrice = dailyPrice;
 	}
 
-	public BorrowStatus getStatus()
+	public boolean getIsOnLoan()
 	{
-		return status;
+		return isOnLoan;
 	}
 
-	public void setStatus(BorrowStatus status)
+	public void setIsOnLoan(boolean isOnLoan)
 	{
-		this.status = status;
+		this.isOnLoan = isOnLoan;
 	}
 
 	public Loan getCurrentLoan()
@@ -104,5 +118,16 @@ public class Item
 	{
 		this.currentLoan = currentLoan;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Item [code=" + code + ", title=" + title + ", "
+				+ "description=" + description + ", location=" + location
+				+ ", dailyPrice=" + dailyPrice + ", isOnLoan=" + isOnLoan + 
+				", currentLoan=" + currentLoan + "]";
+	}
+	
+	
 	
 }

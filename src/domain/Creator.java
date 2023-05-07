@@ -2,9 +2,20 @@ package domain;
 
 import javax.persistence.*;
 
+@Entity
+@Table(name="creators")
 public class Creator
 {
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "creators_seq")
+    @SequenceGenerator(name = "creators_seq", sequenceName = "creators_id_seq", allocationSize = 1)
+    @Column(name = "id")
+	private int id;
+	
+	@Column(name="name")
 	private String name;
+	
+	@Column(name="nationality")
 	private String nationality;
 	
 	public Creator(String name, String nationality)
@@ -16,6 +27,16 @@ public class Creator
 	public Creator()
 	{
 		
+	}
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
 	}
 
 	public String getName()
@@ -36,6 +57,12 @@ public class Creator
 	public void setNationality(String nationality)
 	{
 		this.nationality = nationality;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Creator [name=" + name + ", nationality=" + nationality + "]";
 	}
 	
 }
