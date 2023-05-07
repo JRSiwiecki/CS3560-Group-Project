@@ -111,7 +111,7 @@ public class StudentDAO
 		{
 			session.beginTransaction();
 			
-			// Retrieve the customer from the database using their name
+			// Retrieve the student from the database using their name
 			String hql = "FROM Student WHERE name=:name";
 			Student tempStudent = (Student) session.createQuery(hql)
 			                                    .setParameter("name", student.getName())
@@ -119,7 +119,7 @@ public class StudentDAO
 			
 			tempStudent = session.get(Student.class, tempStudent.getLibraryId());
 					
-			// Update the customer object with the correct ID
+			// Update the student object with the correct ID
 			student.setLibraryId(tempStudent.getLibraryId());
 			
 			hql = "UPDATE Student SET name=:name, bronco_id=:broncoId, course=:course WHERE id=:id";
@@ -143,7 +143,43 @@ public class StudentDAO
 	
 	public static void deleteStudent(Student student)
 	{
-		return;
+		SessionFactory factory = new Configuration()
+				.configure("hibernate.cfg.xml")
+				.addAnnotatedClass(Author.class)
+				.addAnnotatedClass(Book.class)
+				.addAnnotatedClass(Creator.class)
+				.addAnnotatedClass(Director.class)
+				.addAnnotatedClass(Documentary.class)
+				.addAnnotatedClass(Item.class)
+				.addAnnotatedClass(Loan.class)
+				.addAnnotatedClass(Student.class)
+				.buildSessionFactory();
+
+		Session session = factory.getCurrentSession();
+
+		try
+		{
+			session.beginTransaction();
+			
+			// Retrieve the student from the database using their name
+			String hql = "FROM Student WHERE name=:name";
+			Student tempStudent = (Student) session.createQuery(hql)
+			                                    .setParameter("name", student.getName())
+			                                    .uniqueResult();
+
+			// Update the customer object with the correct ID
+			student.setLibraryId(tempStudent.getLibraryId());
+			
+			session.delete(session.get(Student.class, student.getLibraryId()));
+			
+			session.getTransaction().commit();
+		}
+		
+		finally
+		{
+			session.close();
+			factory.close();
+		}
 	}
 }
 
