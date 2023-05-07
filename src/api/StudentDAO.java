@@ -93,7 +93,52 @@ public class StudentDAO
 	
 	public static void updateStudent(Student student)
 	{
-		return;
+		SessionFactory factory = new Configuration()
+				.configure("hibernate.cfg.xml")
+				.addAnnotatedClass(Author.class)
+				.addAnnotatedClass(Book.class)
+				.addAnnotatedClass(Creator.class)
+				.addAnnotatedClass(Director.class)
+				.addAnnotatedClass(Documentary.class)
+				.addAnnotatedClass(Item.class)
+				.addAnnotatedClass(Loan.class)
+				.addAnnotatedClass(Student.class)
+				.buildSessionFactory();
+
+		Session session = factory.getCurrentSession();
+
+		try
+		{
+			session.beginTransaction();
+			
+			// Retrieve the customer from the database using their name
+			String hql = "FROM Student WHERE name=:name";
+			Student tempStudent = (Student) session.createQuery(hql)
+			                                    .setParameter("name", student.getName())
+			                                    .uniqueResult();
+			
+			tempStudent = session.get(Student.class, tempStudent.getLibraryId());
+					
+			// Update the customer object with the correct ID
+			student.setLibraryId(tempStudent.getLibraryId());
+			
+			hql = "UPDATE Student SET name=:name, bronco_id=:broncoId, course=:course WHERE id=:id";
+			
+			session.createQuery(hql)
+				.setParameter("name", student.getName())
+				.setParameter("broncoId", student.getBroncoId())
+				.setParameter("course", student.getCourse())
+				.setParameter("id", student.getLibraryId())
+				.executeUpdate();
+			
+			session.getTransaction().commit();
+		}
+		
+		finally
+		{
+			session.close();
+			factory.close();
+		}
 	}
 	
 	public static void deleteStudent(Student student)

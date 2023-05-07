@@ -33,6 +33,16 @@ public class Student
 		
 	}
 	
+	public int getLibraryId()
+	{
+		return libraryId;
+	}
+
+	public void setLibraryId(int libraryId)
+	{
+		this.libraryId = libraryId;
+	}
+
 	public String getBroncoId()
 	{
 		return broncoId;
