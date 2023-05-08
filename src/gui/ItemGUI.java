@@ -13,6 +13,7 @@ public class ItemGUI
 	private static final int WINDOW_HEIGHT = 600;
 	
 	// Generic item fields
+	JTextField codeField;
 	JTextField titleField;
     JTextField descriptionField;
     JTextField locationField;
@@ -45,7 +46,8 @@ public class ItemGUI
 		panel.setLayout(null);
         
         // Create labels
-        JLabel titleLabel = new JLabel("Title");
+		JLabel codeLabel = new JLabel("Item Code");
+		JLabel titleLabel = new JLabel("Title");
         JLabel descriptionLabel = new JLabel("Description");
         JLabel locationLabel = new JLabel("Location");
         JLabel dailyPriceLabel = new JLabel("Daily Price ($)");
@@ -64,6 +66,7 @@ public class ItemGUI
 
         
         // Create text fields
+        codeField = new JTextField(20);
         titleField = new JTextField(20);
         descriptionField = new JTextField(30);
         locationField = new JTextField(20);
@@ -94,9 +97,16 @@ public class ItemGUI
         JButton updateButton = new JButton("Update");
         JButton deleteButton = new JButton("Delete");
 
+        // Add code components
+        codeLabel.setBounds(25, 25, 100, 25);
+        codeField.setBounds(25, 50, 250, 25);
+        codeField.setEnabled(false);
+        panel.add(codeLabel);
+        panel.add(codeField);
+        
         // Add title components
-        titleLabel.setBounds(25, 25, 100, 25); 
-        titleField.setBounds(25, 50, 925, 25); 
+        titleLabel.setBounds(350, 25, 100, 25); 
+        titleField.setBounds(350, 50, 425, 25); 
         panel.add(titleLabel);
         panel.add(titleField);
         
@@ -257,6 +267,9 @@ public class ItemGUI
             		return;
             	}
             	
+            	// code of books are - 1 because their corresponding item ID 
+            	// is 1 less than the book code
+            	codeField.setText(String.valueOf(tempBook.getCode() - 1));
             	titleField.setText(tempBook.getTitle());
             	descriptionField.setText(tempBook.getDescription());
             	locationField.setText(tempBook.getLocation());
@@ -277,6 +290,9 @@ public class ItemGUI
             		return;
             	}
             	
+            	// code of documentaries are - 1 because their corresponding item ID 
+            	// is 1 less than the documentary code
+            	codeField.setText(String.valueOf(tempDocumentary.getCode() - 1));
             	titleField.setText(tempDocumentary.getTitle());
             	descriptionField.setText(tempDocumentary.getDescription());
             	locationField.setText(tempDocumentary.getLocation());
@@ -293,20 +309,42 @@ public class ItemGUI
         	}
         });
         
-//        // Update item
-//        updateButton.addActionListener(e -> {
-//        	Student tempStudent = new Student();
-//            
-//        	tempStudent.setBroncoId(broncoIdField.getText());
-//        	tempStudent.setName(nameField.getText());
-//        	tempStudent.setCourse(courseField.getText());
-//            
-//            StudentDAO.updateStudent(tempStudent);
-//            
-//            clearFields();
-//            
-//            JOptionPane.showMessageDialog(null, "Student: [" + tempStudent.getName() + "] successfully updated.");
-//        });
+        // Update item
+        updateButton.addActionListener(e -> {
+        	
+        	if (bookButton.isSelected())
+        	{
+        		Book tempBook = new Book();
+        		
+        		tempBook.setCode(Integer.parseInt(codeField.getText()));
+        		tempBook.setTitle(titleField.getText());
+        		tempBook.setDescription(descriptionField.getText());
+        		tempBook.setLocation(locationField.getText());
+        		tempBook.setDailyPrice(Double.parseDouble(dailyPriceField.getText()));
+        		tempBook.setIsOnLoan(BookDAO.readBook(titleField.getText()).getIsOnLoan());
+        		tempBook.setPages(Integer.parseInt(pagesField.getText())); 
+        		tempBook.setPublisher(publisherField.getText());
+        		tempBook.setPublicationDate(Date.valueOf(publicationDateField.getText()));
+        		tempBook.setAuthor(AuthorDAO.readAuthor(creatorField.getText()));
+        		
+        		BookDAO.updateBook(tempBook);
+        		
+        		clearFields();
+        		
+        		JOptionPane.showMessageDialog(null, "Book: [" + tempBook.getTitle() + "] successfully updated.");
+        	}
+        	
+        	else if (documentaryButton.isSelected())
+        	{
+        		
+        	}
+        	
+        	else 
+        	{
+        		JOptionPane.showMessageDialog(null, "ERROR: Please select Book or Documentary.");
+        		return;
+        	}         
+        });
         
         // Delete item
         deleteButton.addActionListener(e -> {
@@ -348,6 +386,7 @@ public class ItemGUI
 	
 	public void clearFields()
 	{
+		codeField.setText("");
 		titleField.setText("");
 	    descriptionField.setText("");
 	    locationField.setText("");
