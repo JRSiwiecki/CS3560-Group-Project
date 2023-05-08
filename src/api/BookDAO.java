@@ -143,7 +143,7 @@ public class BookDAO
 			                                    .setParameter("code", itemCode)
 			                                    .uniqueResult();
 					
-			// Update the student object with the correct ID
+			// Update the item object with the correct ID
 			book.setCode(bookCode);
 				
 			// Update book entry first

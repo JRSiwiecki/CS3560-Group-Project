@@ -1,23 +1,22 @@
 package gui;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class AuthorGUI extends JFrame {
-    private JLabel nameLabel, nationalityLabel, subjectLabel;
-    private JTextField nameField, nationalityField, subjectField;
+public class DirectorGUI extends JFrame {
+    private JLabel nameLabel, nationalityLabel, styleLabel;
+    private JTextField nameField, nationalityField, styleField;
     private JButton searchButton, addButton, updateButton, deleteButton;
 
-    public AuthorGUI() {
-        super("Author Information");
+    public DirectorGUI() {
+        super("Director Information");
 
         nameLabel = new JLabel("Name:");
         nationalityLabel = new JLabel("Nationality:");
-        subjectLabel = new JLabel("Subject:");
+        styleLabel = new JLabel("Style:");
 
         nameField = new JTextField(20);
         nationalityField = new JTextField(20);
-        subjectField = new JTextField(20);
+        styleField = new JTextField(20);
 
         searchButton = new JButton("Search");
         addButton = new JButton("Add");
@@ -46,11 +45,11 @@ public class AuthorGUI extends JFrame {
 
         c.gridx = 0;
         c.gridy = 2;
-        panel.add(subjectLabel, c);
+        panel.add(styleLabel, c);
 
         c.gridx = 1;
         c.gridy = 2;
-        panel.add(subjectField, c);
+        panel.add(styleField, c);
 
         c.gridx = 2;
         c.gridy = 3;
@@ -77,10 +76,6 @@ public class AuthorGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        new AuthorGUI();
+        new DirectorGUI();
     }
 }
-
-
-
-
