@@ -117,24 +117,40 @@ public class AuthorDAO
 		{
 			session.beginTransaction();
 			
-			// Retrieve the author from the database using their name
-			String hql = "FROM Author WHERE name=:name";
+			// Retrieve the author from the database using their id
+			String hql = "FROM Author WHERE id=:id";
 			Author tempAuthor = (Author) session.createQuery(hql)
-			                                    .setParameter("name", author.getName())
+			                                    .setParameter("id", author.getId())
 			                                    .uniqueResult();
 			
 			tempAuthor = session.get(Author.class, tempAuthor.getId());
 					
 			// Update the author object with the correct ID
-			author.setId(tempAuthor.getId());
+//			author.setId(tempAuthor.getId());
 			
-			hql = "UPDATE Author SET name=:name, phone=:phone, email=:email WHERE id=:id";
+			hql = "UPDATE Author SET name=:name, nationality=:nationality, subject=:subject WHERE id=:id";
 			
 			session.createQuery(hql)
 				.setParameter("name", author.getName())
-				.setParameter("phone", author.getNationality())
-				.setParameter("email", author.getSubject())
+				.setParameter("nationality", author.getNationality())
+				.setParameter("subject", author.getSubject())
 				.setParameter("id", author.getId())
+				.executeUpdate();
+			
+			// Retrieve the creator from the database using their name
+			hql = "FROM Creator WHERE id=:id";
+			Creator tempCreator = (Creator) session.createQuery(hql)
+						                         .setParameter("id", tempAuthor.getId() - 1) // CreatorID = AuthorID - 1
+						                         .uniqueResult();
+			
+			// similar to item, once a creator is created, it can't be updated to follow its child's data...
+			// important to mainly track the author/director or book/documentary itself rather than its corresponding creator/item
+			hql = "UPDATE Creator SET name=:name, nationality=:nationality WHERE id=:id";
+			
+			session.createQuery(hql)
+				.setParameter("name", tempCreator.getName())
+				.setParameter("nationality", tempCreator.getNationality())
+				.setParameter("id", tempCreator.getId())
 				.executeUpdate();
 			
 			session.getTransaction().commit();
@@ -167,13 +183,13 @@ public class AuthorDAO
 		{
 			session.beginTransaction();
 			
-			// Retrieve the customer from the database using their name
+			// Retrieve the author from the database using their name
 			String hql = "FROM Author WHERE name=:name";
 			Author tempAuthor = (Author) session.createQuery(hql)
 			                                    .setParameter("name", author.getName())
 			                                    .uniqueResult();
 
-			// Update the customer object with the correct ID
+			// Update the author object with the correct ID
 			author.setId(tempAuthor.getId());
 			
 			session.delete(session.get(Author.class, author.getId()));

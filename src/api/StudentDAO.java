@@ -111,7 +111,7 @@ public class StudentDAO
 		{
 			session.beginTransaction();
 			
-			// Retrieve the student from the database using their name
+			// Retrieve the student from the database using their id
 			String hql = "FROM Student WHERE library_id=:library_id";
 			Student tempStudent = (Student) session.createQuery(hql)
 			                                    .setParameter("library_id", student.getLibraryId())

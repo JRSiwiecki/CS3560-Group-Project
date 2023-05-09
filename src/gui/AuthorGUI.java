@@ -2,9 +2,8 @@ package gui;
 
 import javax.swing.*;
 
-import api.StudentDAO;
+import api.AuthorDAO;
 import domain.Author;
-import domain.Student;
 
 import java.awt.*;
 
