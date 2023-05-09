@@ -194,6 +194,14 @@ public class AuthorDAO
 			
 			session.delete(session.get(Author.class, author.getId()));
 			
+			// Retrieve the creator from the database using their name
+			hql = "FROM Creator WHERE id=:id";
+			Creator tempCreator = (Creator) session.createQuery(hql)
+												   .setParameter("id", author.getId() - 1) // CreatorID = AuthorID - 1
+												    .uniqueResult();
+						
+			session.delete(session.get(Creator.class, tempCreator.getId()));
+			
 			session.getTransaction().commit();
 		}
 		
