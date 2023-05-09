@@ -2,13 +2,17 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 
+@SuppressWarnings("serial")
 public class DirectorGUI extends JFrame {
     private JLabel nameLabel, nationalityLabel, styleLabel;
     private JTextField nameField, nationalityField, styleField;
     private JButton searchButton, addButton, updateButton, deleteButton;
 
     public DirectorGUI() {
-        super("Director Information");
+        super("Director Management");
+        
+        setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         nameLabel = new JLabel("Name:");
         nationalityLabel = new JLabel("Nationality:");
@@ -71,9 +75,15 @@ public class DirectorGUI extends JFrame {
 
         setSize(800, 200);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
+    
+    public void showWindow()
+	{
+		setVisible(true);
+	}
 
     public static void main(String[] args) {
         new DirectorGUI();

@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 
+@SuppressWarnings("serial")
 public class LoanGUI extends JFrame {
     
     // components
@@ -13,9 +14,10 @@ public class LoanGUI extends JFrame {
     
     public LoanGUI() {
         // set up frame
-        setTitle("Loan GUI");
+        setTitle("Loan Management");
         setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         
         // create components
@@ -92,9 +94,13 @@ public class LoanGUI extends JFrame {
         gbc.gridwidth = 3;
         add(scrollPane, gbc);
         
-        // show frame
-        setVisible(true);
+        
     }
+    
+    public void showWindow()
+	{
+		setVisible(true);
+	}
     
     public static void main(String[] args) {
         new LoanGUI();
