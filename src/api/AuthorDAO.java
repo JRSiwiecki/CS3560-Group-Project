@@ -163,7 +163,7 @@ public class AuthorDAO
 		}
 	}
 	
-	public void deleteAuthor(Author author)
+	public static void deleteAuthor(Author author)
 	{
 		SessionFactory factory = new Configuration()
 				.configure("hibernate.cfg.xml")

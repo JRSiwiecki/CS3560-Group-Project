@@ -163,7 +163,7 @@ public class DirectorDAO
 		}
 	}
 	
-	public void deleteDirector(Director director)
+	public static void deleteDirector(Director director)
 	{
 		SessionFactory factory = new Configuration()
 				.configure("hibernate.cfg.xml")
@@ -189,10 +189,10 @@ public class DirectorDAO
 			                                    .setParameter("name", director.getName())
 			                                    .uniqueResult();
 
-			// Update the author object with the correct ID
+			// Update the director object with the correct ID
 			director.setId(tempDirector.getId());
 			
-			session.delete(session.get(Author.class, director.getId()));
+			session.delete(session.get(Director.class, director.getId()));
 			
 			// Retrieve the creator from the database using their name
 			hql = "FROM Creator WHERE id=:id";

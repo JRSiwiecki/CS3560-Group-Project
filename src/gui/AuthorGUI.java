@@ -149,7 +149,7 @@ public class AuthorGUI extends JFrame {
         	tempAuthor.setNationality(nationalityField.getText());
         	tempAuthor.setSubject(subjectField.getText());
      
-        	AuthorDAO.updateAuthor(tempAuthor);
+        	AuthorDAO.deleteAuthor(tempAuthor);
             
             clearFields();
             

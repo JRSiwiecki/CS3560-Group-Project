@@ -1,5 +1,9 @@
 package gui;
 import javax.swing.*;
+
+import api.DirectorDAO;
+import domain.Director;
+
 import java.awt.*;
 
 @SuppressWarnings("serial")
@@ -90,8 +94,79 @@ public class DirectorGUI extends JFrame {
         setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
+        
+        // Create director
+        addButton.addActionListener(e -> {
+        	String name = nameField.getText();
+            String nationality = nationalityField.getText();
+            String style = styleField.getText();
+            
+            DirectorDAO.createDirector(name, nationality, style);
+            
+            clearFields();
+            
+            JOptionPane.showMessageDialog(null, "Director: [" + name + "] successfully added.");
+        });
+        
+        // Read director
+        searchButton.addActionListener(e -> {
+        	String name = nameField.getText();
+        	
+        	Director tempDirector = DirectorDAO.readDirector(name);
+        	
+        	if (tempDirector == null)
+        	{
+        		JOptionPane.showMessageDialog(null, "No director found!");
+        		return;
+        	}
+        	
+        	directorIdField.setText(String.valueOf(tempDirector.getId())); 
+        	nameField.setText(tempDirector.getName());
+        	nationalityField.setText(tempDirector.getNationality());
+        	styleField.setText(tempDirector.getStyle());    	
+        });
+        
+        // Update director
+        updateButton.addActionListener(e -> {
+        	Director tempDirector = new Director();
+            
+        	tempDirector.setId(Integer.parseInt(directorIdField.getText()));
+        	tempDirector.setName(nameField.getText());
+        	tempDirector.setNationality(nationalityField.getText());
+        	tempDirector.setStyle(styleField.getText());
+            
+            DirectorDAO.updateDirector(tempDirector);
+            
+            clearFields();
+            
+            JOptionPane.showMessageDialog(null, "Director: [" + tempDirector.getName() + "] successfully updated.");
+        });
+        
+        // Delete director
+        deleteButton.addActionListener(e -> {
+        	Director tempDirector = new Director();
+            
+        	tempDirector.setId(Integer.parseInt(directorIdField.getText()));
+        	tempDirector.setName(nameField.getText());
+        	tempDirector.setNationality(nationalityField.getText());
+        	tempDirector.setStyle(styleField.getText());
+     
+        	DirectorDAO.deleteDirector(tempDirector);
+            
+            clearFields();
+            
+            JOptionPane.showMessageDialog(null, "Director: [" + tempDirector.getName() + "] successfully updated.");
+        });
     }
     
+    public void clearFields()
+	{
+		directorIdField.setText("");
+		nameField.setText("");
+        nationalityField.setText("");
+        styleField.setText("");
+	}
+     
     public void showWindow()
 	{
 		setVisible(true);
