@@ -2,14 +2,7 @@ package gui;
 
 import javax.swing.*;
 
-import api.AuthorDAO;
-import api.BookDAO;
-import api.DirectorDAO;
-import api.DocumentaryDAO;
 import api.LoanDAO;
-import domain.Author;
-import domain.Director;
-
 import java.awt.*;
 import java.sql.Date;
 
@@ -17,8 +10,8 @@ import java.sql.Date;
 public class LoanGUI extends JFrame {
     
     // components
-    private JLabel loanNumberLabel, loanItemLabel, loanStudentLabel, loanStartLabel, loanEndLabel, loanReturnLabel, loanDaysLabel;
-    private JTextField loanNumberField, loanItemField, loanStudentField, loanStartField, loanEndField, loanReturnField, loanDaysField;
+    private JLabel loanNumberLabel, loanItemLabel, loanStudentLabel, loanStartLabel, loanEndLabel, loanReturnLabel;
+    private JTextField loanNumberField, loanItemField, loanStudentField, loanStartField, loanEndField, loanReturnField;
     private JButton enterButton, searchButton, updateButton, deleteButton;
     private JTextArea receiptArea;
     private JRadioButton bookButton, documentaryButton;
@@ -40,7 +33,6 @@ public class LoanGUI extends JFrame {
         loanStartLabel = new JLabel("Start Date (yyyy-[m]m-[d]d): ");
         loanEndLabel = new JLabel("End Date (yyyy-[m]m-[d]d): ");
         loanReturnLabel = new JLabel("Return Date (yyyy-[m]m-[d]d): ");
-        loanDaysLabel = new JLabel("Loan For How Many Days? ");
         
         loanNumberField = new JTextField(10);
         loanItemField = new JTextField(10);
@@ -48,7 +40,6 @@ public class LoanGUI extends JFrame {
         loanStartField = new JTextField(10);
         loanEndField = new JTextField(10);
         loanReturnField = new JTextField(10);
-        loanDaysField = new JTextField(10);
         
         enterButton = new JButton("Enter");
         searchButton = new JButton("Search");
@@ -125,19 +116,11 @@ public class LoanGUI extends JFrame {
         add(loanReturnField, gbc);
         
         gbc.gridx = 2;
-        gbc.gridy = 5;
+        gbc.gridy = 4;
         add(bookButton, gbc);
-           
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        add(loanDaysLabel, gbc);
-        
-        gbc.gridx = 1;
-        gbc.gridy = 6;
-        add(loanDaysField, gbc);
         
         gbc.gridx = 2;
-        gbc.gridy = 6;
+        gbc.gridy = 5;
         add(documentaryButton, gbc);
         
         gbc.gridx = 0;
@@ -212,7 +195,6 @@ public class LoanGUI extends JFrame {
 	    loanStartField.setText("");
 	    loanEndField.setText("");
 	    loanReturnField.setText("");
-	    loanDaysField.setText("");
 	    receiptArea.setText("");
 	}
     

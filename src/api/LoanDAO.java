@@ -35,6 +35,19 @@ public class LoanDAO
 		
 			Student tempStudent = StudentDAO.readStudent(studentName);
 			
+			// need to use the Class name, not table name
+			String hql = "FROM Loan WHERE name=:name";
+						
+			@SuppressWarnings("unchecked")
+			List<Book> students = session.createQuery(hql)
+								.setParameter("name", tempStudent.getName())
+								.list();
+			
+			for (int i = 0; i < students.size(); i++)
+			{
+				
+			}
+			
 			Documentary tempDocumentary;
 			Book tempBook;
 			
@@ -55,7 +68,7 @@ public class LoanDAO
 				
 				tempBook.setIsOnLoan(true);
 				
-				session.save(tempBook);
+				BookDAO.updateBook(tempBook);
 				
 				tempLoan.setItem(tempBook);
 				
@@ -74,7 +87,7 @@ public class LoanDAO
 				
 				tempDocumentary.setIsOnLoan(true);
 				
-				session.save(tempDocumentary);
+				DocumentaryDAO.updateDocumentary(tempDocumentary);
 				
 				tempLoan.setItem(tempDocumentary);
 			}		
