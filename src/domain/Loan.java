@@ -101,8 +101,6 @@ public class Loan
 	startDate + ", dueDate=" + dueDate + ", returnDate="
 				+ returnDate + ", student=" + student.toString() + ", item=" + item.toString() + "]";
 	}
-
-	
 	
 	
 }
