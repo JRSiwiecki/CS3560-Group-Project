@@ -136,53 +136,72 @@ public class DocumentaryDAO
 			int itemCode = documentary.getCode();
 			int documentaryCode = itemCode + 1;
 			
+			Item tempItem = session.get(Item.class, itemCode);
+			
+			tempItem.setTitle(documentary.getTitle());
+			tempItem.setDescription(documentary.getDescription());
+			tempItem.setLocation(documentary.getLocation());
+			tempItem.setDailyPrice(documentary.getDailyPrice());
+			tempItem.setIsOnLoan(documentary.getIsOnLoan());
+			
+			Documentary tempDocumentary = session.get(Documentary.class, itemCode);
+			
+			tempDocumentary.setTitle(documentary.getTitle());
+			tempDocumentary.setDescription(documentary.getDescription());
+			tempDocumentary.setLocation(documentary.getLocation());
+			tempDocumentary.setDailyPrice(documentary.getDailyPrice());
+			tempDocumentary.setIsOnLoan(documentary.getIsOnLoan());
+			tempDocumentary.setLength(documentary.getLength());
+			tempDocumentary.setReleaseDate(documentary.getReleaseDate());
+			tempDocumentary.setDirector(documentary.getDirector());
+			
 			// Retrieve the item from the database using their itemCode
-			String hql = "FROM Item WHERE code=:code";
-			Item tempItem = (Item) session.createQuery(hql)
-			                                    .setParameter("code", itemCode)
-			                                    .uniqueResult();
-					
-			// Update the item object with the correct ID
-			documentary.setCode(documentaryCode);
-				
-			// Update documentary entry first
-			hql = "UPDATE Documentary SET title=:title, description=:description, location=:location, daily_price=:dailyPrice, is_on_loan=:isOnLoan, length=:length, release_date=:releaseDate, director_id=:directorId WHERE code=:code";
-			
-			session.createQuery(hql)
-				.setParameter("title", documentary.getTitle())
-				.setParameter("description", documentary.getDescription())
-				.setParameter("location", documentary.getLocation())
-				.setParameter("dailyPrice", documentary.getDailyPrice())
-				.setParameter("isOnLoan", documentary.getIsOnLoan())
-				.setParameter("length", documentary.getLength())
-				.setParameter("releaseDate", documentary.getReleaseDate())
-				.setParameter("directorId", documentary.getDirector().getId())
-				.setParameter("code", documentaryCode)
-				.executeUpdate();
-			
-			// Update item entry second
-			// For the time being, this is fine but it should update both items.
-			// Currently, if you try to update daily_price or is_on_loan or both, it doesn't work.
-			// hql = "UPDATE Item SET title=:title, description=:description, location=:location, daily_price=:dailyPrice, is_on_loan=:isOnLoan WHERE code=:code";
-			hql = "UPDATE Item SET title=:title, description=:description, location=:location WHERE code=:code";
-			
-			session.createQuery(hql)
-				.setParameter("title", tempItem.getTitle())
-				.setParameter("description", tempItem.getDescription())
-				.setParameter("location", tempItem.getLocation())
-//				.setParameter("dailyPrice", tempItem.getDailyPrice())
-//				.setParameter("isOnLoan", tempItem.getIsOnLoan())
-				.setParameter("code", itemCode)
-				.executeUpdate();
-			
-			// this does NOT work but it doesn't crash so
-			hql = "UPDATE Item SET dailyPrice=:daily_price, isOnLoan=:is_on_loan WHERE code=:code";
-			
-			session.createQuery(hql)
-				.setParameter("daily_price", tempItem.getDailyPrice())
-				.setParameter("is_on_loan", tempItem.getIsOnLoan())
-				.setParameter("code", itemCode)
-			.executeUpdate();
+//			String hql = "FROM Item WHERE code=:code";
+//			Item tempItem = (Item) session.createQuery(hql)
+//			                                    .setParameter("code", itemCode)
+//			                                    .uniqueResult();
+//					
+//			// Update the item object with the correct ID
+//			documentary.setCode(documentaryCode);
+//				
+//			// Update documentary entry first
+//			hql = "UPDATE Documentary SET title=:title, description=:description, location=:location, daily_price=:dailyPrice, is_on_loan=:isOnLoan, length=:length, release_date=:releaseDate, director_id=:directorId WHERE code=:code";
+//			
+//			session.createQuery(hql)
+//				.setParameter("title", documentary.getTitle())
+//				.setParameter("description", documentary.getDescription())
+//				.setParameter("location", documentary.getLocation())
+//				.setParameter("dailyPrice", documentary.getDailyPrice())
+//				.setParameter("isOnLoan", documentary.getIsOnLoan())
+//				.setParameter("length", documentary.getLength())
+//				.setParameter("releaseDate", documentary.getReleaseDate())
+//				.setParameter("directorId", documentary.getDirector().getId())
+//				.setParameter("code", documentaryCode)
+//				.executeUpdate();
+//			
+//			// Update item entry second
+//			// For the time being, this is fine but it should update both items.
+//			// Currently, if you try to update daily_price or is_on_loan or both, it doesn't work.
+//			// hql = "UPDATE Item SET title=:title, description=:description, location=:location, daily_price=:dailyPrice, is_on_loan=:isOnLoan WHERE code=:code";
+//			hql = "UPDATE Item SET title=:title, description=:description, location=:location WHERE code=:code";
+//			
+//			session.createQuery(hql)
+//				.setParameter("title", tempItem.getTitle())
+//				.setParameter("description", tempItem.getDescription())
+//				.setParameter("location", tempItem.getLocation())
+////				.setParameter("dailyPrice", tempItem.getDailyPrice())
+////				.setParameter("isOnLoan", tempItem.getIsOnLoan())
+//				.setParameter("code", itemCode)
+//				.executeUpdate();
+//			
+//			// this does NOT work but it doesn't crash so
+//			hql = "UPDATE Item SET dailyPrice=:daily_price, isOnLoan=:is_on_loan WHERE code=:code";
+//			
+//			session.createQuery(hql)
+//				.setParameter("daily_price", tempItem.getDailyPrice())
+//				.setParameter("is_on_loan", tempItem.getIsOnLoan())
+//				.setParameter("code", itemCode)
+//			.executeUpdate();
 			
 			
 			session.getTransaction().commit();

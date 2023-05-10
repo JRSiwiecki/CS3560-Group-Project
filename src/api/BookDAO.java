@@ -137,54 +137,73 @@ public class BookDAO
 			int itemCode = book.getCode();
 			int bookCode = itemCode + 1;
 			
+			Item tempItem = session.get(Item.class, itemCode);
+			
+			tempItem.setTitle(book.getTitle());
+			tempItem.setDescription(book.getDescription());
+			tempItem.setLocation(book.getLocation());
+			tempItem.setDailyPrice(book.getDailyPrice());
+			tempItem.setIsOnLoan(book.getIsOnLoan());
+		
+			Book tempBook = session.get(Book.class, itemCode);
+			
+			tempBook.setTitle(book.getTitle());
+			tempBook.setDescription(book.getDescription());
+			tempBook.setLocation(book.getLocation());
+			tempBook.setDailyPrice(book.getDailyPrice());
+			tempBook.setIsOnLoan(book.getIsOnLoan());
+			tempBook.setPages(book.getPages());
+			tempBook.setPublisher(book.getPublisher());
+			tempBook.setPublicationDate(book.getPublicationDate());
+			tempBook.setAuthor(book.getAuthor());
+			
 			// Retrieve the item from the database using their itemCode
-			String hql = "FROM Item WHERE code=:code";
-			Item tempItem = (Item) session.createQuery(hql)
-			                                    .setParameter("code", itemCode)
-			                                    .uniqueResult();
+//			String hql = "FROM Item WHERE code=:code";
+//			Item tempItem = (Item) session.createQuery(hql)
+//			                                    .setParameter("code", itemCode)
+//			                                    .uniqueResult();
 					
-			// Update the item object with the correct ID
-			book.setCode(bookCode);
+			// seems that you still need to grab it with the itemCode, not bookCode
 				
 			// Update book entry first
-			hql = "UPDATE Book SET title=:title, description=:description, location=:location, daily_price=:dailyPrice, is_on_loan=:isOnLoan, pages=:pages, publisher=:publisher, publication_date=:publicationDate, author_id=:authorId WHERE code=:code";
-			
-			session.createQuery(hql)
-				.setParameter("title", book.getTitle())
-				.setParameter("description", book.getDescription())
-				.setParameter("location", book.getLocation())
-				.setParameter("dailyPrice", book.getDailyPrice())
-				.setParameter("isOnLoan", book.getIsOnLoan())
-				.setParameter("pages", book.getPages())
-				.setParameter("publisher", book.getPublisher())
-				.setParameter("publicationDate", book.getPublicationDate())
-				.setParameter("authorId", book.getAuthor().getId())
-				.setParameter("code", bookCode)
-				.executeUpdate();
+//			hql = "UPDATE Book SET title=:title, description=:description, location=:location, daily_price=:dailyPrice, is_on_loan=:isOnLoan, pages=:pages, publisher=:publisher, publication_date=:publicationDate, author_id=:authorId WHERE code=:code";
+//			
+//			session.createQuery(hql)
+//				.setParameter("title", book.getTitle())
+//				.setParameter("description", book.getDescription())
+//				.setParameter("location", book.getLocation())
+//				.setParameter("dailyPrice", book.getDailyPrice())
+//				.setParameter("isOnLoan", book.getIsOnLoan())
+//				.setParameter("pages", book.getPages())
+//				.setParameter("publisher", book.getPublisher())
+//				.setParameter("publicationDate", book.getPublicationDate())
+//				.setParameter("authorId", book.getAuthor().getId())
+//				.setParameter("code", bookCode)
+//				.executeUpdate();
 			
 			// Update item entry second
 			// For the time being, this is fine but it should update both items.
 			// Currently, if you try to update daily_price or is_on_loan or both, it doesn't work.
 			// hql = "UPDATE Item SET title=:title, description=:description, location=:location, daily_price=:dailyPrice, is_on_loan=:isOnLoan WHERE code=:code";
-			hql = "UPDATE Item SET title=:title, description=:description, location=:location WHERE code=:code";
-			
-			session.createQuery(hql)
-				.setParameter("title", tempItem.getTitle())
-				.setParameter("description", tempItem.getDescription())
-				.setParameter("location", tempItem.getLocation())
-//				.setParameter("dailyPrice", tempItem.getDailyPrice())
-//				.setParameter("isOnLoan", tempItem.getIsOnLoan())
-				.setParameter("code", itemCode)
-				.executeUpdate();
-			
-			// this does NOT work but it doesn't crash so
-			hql = "UPDATE Item SET dailyPrice=:daily_price, isOnLoan=:is_on_loan WHERE code=:code";
-			
-			session.createQuery(hql)
-				.setParameter("daily_price", tempItem.getDailyPrice())
-				.setParameter("is_on_loan", tempItem.getIsOnLoan())
-				.setParameter("code", itemCode)
-			.executeUpdate();
+//			hql = "UPDATE Item SET title=:title, description=:description, location=:location WHERE code=:code";
+//			
+//			session.createQuery(hql)
+//				.setParameter("title", tempItem.getTitle())
+//				.setParameter("description", tempItem.getDescription())
+//				.setParameter("location", tempItem.getLocation())
+////				.setParameter("dailyPrice", tempItem.getDailyPrice())
+////				.setParameter("isOnLoan", tempItem.getIsOnLoan())
+//				.setParameter("code", itemCode)
+//				.executeUpdate();
+//			
+//			// this does NOT work but it doesn't crash so
+//			hql = "UPDATE Item SET dailyPrice=:daily_price, isOnLoan=:is_on_loan WHERE code=:code";
+//			
+//			session.createQuery(hql)
+//				.setParameter("daily_price", tempItem.getDailyPrice())
+//				.setParameter("is_on_loan", tempItem.getIsOnLoan())
+//				.setParameter("code", itemCode)
+//			.executeUpdate();
 			
 			
 			session.getTransaction().commit();
