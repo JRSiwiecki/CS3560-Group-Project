@@ -421,7 +421,7 @@ public class ItemGUI
         });
     }
 	
-	public String getLoanDueDateForItem(Item item)
+	private String getLoanDueDateForItem(Item item)
 	{
 		List<Loan> openLoans = LoanDAO.getOpenLoans();
 		

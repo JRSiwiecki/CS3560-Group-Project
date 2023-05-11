@@ -10,12 +10,15 @@ import api.LoanDAO;
 import api.StudentDAO;
 import domain.Book;
 import domain.Documentary;
+import domain.Item;
 import domain.Loan;
 import domain.Student;
 
 import java.awt.*;
 import java.sql.Date;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @SuppressWarnings("serial")
@@ -182,7 +185,8 @@ public class LoanGUI extends JFrame {
                 	 return;
             	 }
             		 
-            	 JOptionPane.showMessageDialog(null, "Loan For Book: [" + itemName + "] successfully added.");
+            	 JOptionPane.showMessageDialog(null, "Loan For Book: [" + itemName + "] For Student: [" + studentName + "] created."
+         				+ "\nDue Date: [" + endDate + "]");
             	 clearFields();
             }
                       
@@ -196,7 +200,8 @@ public class LoanGUI extends JFrame {
                	 return;
            	 }
             	
-            	JOptionPane.showMessageDialog(null, "Loan For Documentary: [" + itemName + "] successfully added.");
+            	JOptionPane.showMessageDialog(null, "Loan For Documentary: [" + itemName + "] For Student: [" + studentName + "] created."
+        				+ "\nDue Date: [" + endDate + "]");
            	 	clearFields();
             }
             
@@ -204,49 +209,6 @@ public class LoanGUI extends JFrame {
             {
             	JOptionPane.showMessageDialog(null, "ERROR: Please select Book or Documentary.");
             }  
-        });
-        
-        // Update loan
-        updateButton.addActionListener(e -> {
-        	
-        	Loan tempLoan = new Loan();
-        	Student tempStudent = StudentDAO.readStudent(loanStudentField.getText());
-        	
-        	tempLoan.setNumber(Integer.parseInt(loanNumberField.getText()));
-        	tempLoan.setStartDate(Date.valueOf(loanStartField.getText()));
-        	tempLoan.setDueDate(Date.valueOf(loanEndField.getText()));
-        	tempLoan.setReturnDate( (loanReturnField.getText().equals("")) ? null : Date.valueOf(loanReturnField.getText()));
-        	tempLoan.setStudent(tempStudent);
-        	
-        	if (bookButton.isSelected())
-        	{
-        		Book tempBook = BookDAO.readBook(loanItemField.getText()); 		
-        		tempLoan.setItem(tempBook);
-        		
-        		LoanDAO.updateLoan(tempLoan);
-        		
-        		clearFields();
-        		
-        		JOptionPane.showMessageDialog(null, "Loan successfully updated.");
-        	}
-        	
-        	else if (documentaryButton.isSelected())
-        	{
-        		Documentary tempDocumentary = DocumentaryDAO.readDocumentary(loanItemField.getText()); 
-        		tempLoan.setItem(tempDocumentary);
-        		
-        		LoanDAO.updateLoan(tempLoan);
-        		
-        		clearFields();
-        		
-        		JOptionPane.showMessageDialog(null, "Loan successfully updated.");
-        	}
-        	
-        	else 
-        	{
-        		JOptionPane.showMessageDialog(null, "ERROR: Please select Book or Documentary.");
-        		return;
-        	}         
         });
         
         // read loan
@@ -316,6 +278,75 @@ public class LoanGUI extends JFrame {
         	}
         });
         
+        // Update loan
+        updateButton.addActionListener(e -> {
+        	
+        	Loan tempLoan = new Loan();
+        	Student tempStudent = StudentDAO.readStudent(loanStudentField.getText());
+        	
+        	tempLoan.setNumber(Integer.parseInt(loanNumberField.getText()));
+        	tempLoan.setStartDate(Date.valueOf(loanStartField.getText()));
+        	tempLoan.setDueDate(Date.valueOf(loanEndField.getText()));
+        	tempLoan.setReturnDate( (loanReturnField.getText().equals("")) ? null : Date.valueOf(loanReturnField.getText()));
+        	tempLoan.setStudent(tempStudent);
+        	
+        	if (bookButton.isSelected())
+        	{
+        		Book tempBook = BookDAO.readBook(loanItemField.getText()); 		
+        		tempLoan.setItem(tempBook);
+        		
+        		LoanDAO.updateLoan(tempLoan);
+        		
+        		clearFields();
+        		
+        		if (tempLoan.getReturnDate() != null)
+        		{
+        			double totalFine = calculateFine(tempLoan);
+
+        			JOptionPane.showMessageDialog(null, "Loan For Book: [" + tempBook.getTitle() + "] For Student: [" + tempStudent.getName() + "] updated."
+            				+ "\nDue Date: [" + tempLoan.getDueDate() + "]"
+            				+ "\nTotal Price: [$" + String.valueOf(totalFine) + "]");
+        		}
+        		
+        		else
+        		{
+        			JOptionPane.showMessageDialog(null, "Loan For Book: [" + tempBook.getTitle() + "] For Student: [" + tempStudent.getName() + "] updated."
+            				+ "\nDue Date: [" + tempLoan.getDueDate() + "]");
+        		}	       		
+        	}
+        	
+        	else if (documentaryButton.isSelected())
+        	{
+        		Documentary tempDocumentary = DocumentaryDAO.readDocumentary(loanItemField.getText()); 
+        		tempLoan.setItem(tempDocumentary);
+        		
+        		LoanDAO.updateLoan(tempLoan);
+        		
+        		clearFields();
+        		
+        		if (tempLoan.getReturnDate() != null)
+        		{
+        			double totalFine = calculateFine(tempLoan);
+
+        			JOptionPane.showMessageDialog(null, "Loan For Documentary: [" + tempDocumentary.getTitle() + "] For Student: [" + tempStudent.getName() + "] updated."
+            				+ "\nDue Date: [" + tempLoan.getDueDate() + "]"
+            				+ "\nTotal Price: [$" + String.valueOf(totalFine) + "]");
+        		}
+        		
+        		else
+        		{
+        			JOptionPane.showMessageDialog(null, "Loan For Book: [" + tempDocumentary.getTitle() + "] For Student: [" + tempStudent.getName() + "] updated."
+            				+ "\nDue Date: [" + tempLoan.getDueDate() + "]");
+        		}	 
+        	}
+        	
+        	else 
+        	{
+        		JOptionPane.showMessageDialog(null, "ERROR: Please select Book or Documentary.");
+        		return;
+        	}         
+        });
+        
         // Delete loan
         deleteButton.addActionListener(e -> {
         	
@@ -337,7 +368,7 @@ public class LoanGUI extends JFrame {
             	
             	clearFields();
             	
-            	JOptionPane.showMessageDialog(null, "Loan successfully deleted.");
+            	JOptionPane.showMessageDialog(null, "Loan For Book: [" + tempBook.getTitle() + "] For Student: [" + tempStudent.getName() + "] deleted.");
             }
             
             else if (documentaryButton.isSelected())
@@ -358,7 +389,7 @@ public class LoanGUI extends JFrame {
             	
             	clearFields();
             	
-            	JOptionPane.showMessageDialog(null, "Loan successfully deleted.");
+            	JOptionPane.showMessageDialog(null, "Loan For Documentary: [" + tempDocumentary.getTitle() + "] For Student: [" + tempStudent.getName() + "] deleted.");
             }
             
             else 
@@ -380,7 +411,24 @@ public class LoanGUI extends JFrame {
         
     }
     
-	public void clearFields()
+	private double calculateFine(Loan loan)
+	{
+		// Calculate number of days after the due date until the book was returned
+		LocalDateTime dueDate = loan.getDueDate().toLocalDate().atStartOfDay();
+		LocalDateTime returnDate = loan.getReturnDate().toLocalDate().atStartOfDay();
+		
+		Duration duration = Duration.between(dueDate, returnDate);
+		long days = duration.toDays();
+		
+		double loanItemPrice = loan.getItem().getDailyPrice();
+		
+		// totalFine is the loan item price + 10% of the price per extra day
+		double totalFine = days * (loanItemPrice + (loanItemPrice * 0.10));
+		
+		return (totalFine < 0.0) ? 0.0 : totalFine;
+	}
+
+	private void clearFields()
 	{
 		loanNumberField.setText("");
 		loanItemField.setText("");
@@ -392,7 +440,7 @@ public class LoanGUI extends JFrame {
 	}
 	
 	// Display any loans that are either still open or are overdue
-	public void displayOpenLoans()
+	private void displayOpenLoans()
 	{
 		List<Loan> overDueLoans = LoanDAO.getOpenLoans();
         String loansText = "";
@@ -406,7 +454,7 @@ public class LoanGUI extends JFrame {
 	}
 	
 	// Display all loans that are overdue
-	public void displayOverDueLoans()
+	private void displayOverDueLoans()
 	{
 		List<Loan> overDueLoans = LoanDAO.getOpenLoans();
         String overDueLoansText = "";
