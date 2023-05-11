@@ -197,7 +197,7 @@ public class DocumentaryDAO
 		}
 	}
 	
-	public static void deleteDocumentary(Documentary documentary)
+	public static boolean deleteDocumentary(Documentary documentary)
 	{
 		SessionFactory factory = new Configuration()
 				.configure("hibernate.cfg.xml")
@@ -217,6 +217,22 @@ public class DocumentaryDAO
 		{
 			session.beginTransaction();
 			
+			String hql = "FROM Loan";
+			// Retrive all loans
+			List<Loan> loans = session.createQuery(hql, Loan.class).getResultList();
+			
+			
+			// If there is a loan with this item, we can't delete the item
+			for (int i = 0; i < loans.size(); i++)
+			{
+				Loan currentLoan = loans.get(i);
+				
+				if (currentLoan.getItem().getTitle().equals(documentary.getTitle()))
+				{
+					return false;
+				}
+			}
+			
 			// Remember that the ItemID is the Documentary - 1.
 			Item tempItem = session.get(Item.class, documentary.getCode() - 1);
 					
@@ -224,6 +240,8 @@ public class DocumentaryDAO
 			session.delete(session.get(Item.class, tempItem.getCode()));
 			
 			session.getTransaction().commit();
+			
+			return true;
 		}
 		
 		finally

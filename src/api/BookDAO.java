@@ -199,7 +199,7 @@ public class BookDAO
 		}
 	}
 	
-	public static void deleteBook(Book book)
+	public static boolean deleteBook(Book book)
 	{
 		SessionFactory factory = new Configuration()
 				.configure("hibernate.cfg.xml")
@@ -219,6 +219,22 @@ public class BookDAO
 		{
 			session.beginTransaction();
 			
+			String hql = "FROM Loan";
+			// Retrive all loans
+			List<Loan> loans = session.createQuery(hql, Loan.class).getResultList();
+			
+			
+			// If there is a loan with this item, we can't delete the item
+			for (int i = 0; i < loans.size(); i++)
+			{
+				Loan currentLoan = loans.get(i);
+				
+				if (currentLoan.getItem().getTitle().equals(book.getTitle()))
+				{
+					return false;
+				}
+			}
+			
 			// Remember that the ItemID is the BookID - 1.
 			Item tempItem = session.get(Item.class, book.getCode() - 1);
 					
@@ -226,6 +242,8 @@ public class BookDAO
 			session.delete(session.get(Item.class, tempItem.getCode()));
 			
 			session.getTransaction().commit();
+			
+			return true;
 		}
 		
 		finally

@@ -139,7 +139,12 @@ public class StudentGUI
             tempStudent.setName(nameField.getText());
             tempStudent.setCourse(courseField.getText());
      
-            StudentDAO.deleteStudent(tempStudent);
+            boolean success = StudentDAO.deleteStudent(tempStudent);
+            
+            if (!success)
+            {
+            	JOptionPane.showMessageDialog(null, "Student: [" + tempStudent.getName() + "] can't be deleted as they have an open loan.");
+            }
             
             clearFields();
             

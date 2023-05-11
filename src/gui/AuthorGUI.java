@@ -149,7 +149,12 @@ public class AuthorGUI extends JFrame {
         	tempAuthor.setNationality(nationalityField.getText());
         	tempAuthor.setSubject(subjectField.getText());
      
-        	AuthorDAO.deleteAuthor(tempAuthor);
+        	boolean success = AuthorDAO.deleteAuthor(tempAuthor);
+        	
+        	if (!success)
+        	{
+        		JOptionPane.showMessageDialog(null, "Author: [" + tempAuthor.getName() + "] can't be deleted as they are required for an item.");
+        	}
             
             clearFields();
             

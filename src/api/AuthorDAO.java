@@ -163,7 +163,7 @@ public class AuthorDAO
 		}
 	}
 	
-	public static void deleteAuthor(Author author)
+	public static boolean deleteAuthor(Author author)
 	{
 		SessionFactory factory = new Configuration()
 				.configure("hibernate.cfg.xml")
@@ -188,6 +188,22 @@ public class AuthorDAO
 			Author tempAuthor = (Author) session.createQuery(hql)
 			                                    .setParameter("name", author.getName())
 			                                    .uniqueResult();
+			
+			hql = "FROM Book";
+			// Retrive all books
+			List<Book> books = session.createQuery(hql, Book.class).getResultList();
+			
+			
+			// If there is a book with this author, we can't delete the author
+			for (int i = 0; i < books.size(); i++)
+			{
+				Book currentBook = books.get(i);
+				
+				if (currentBook.getAuthor().getName().equals(tempAuthor.getName()))
+				{
+					return false;
+				}
+			}
 
 			// Update the author object with the correct ID
 			author.setId(tempAuthor.getId());
@@ -203,6 +219,8 @@ public class AuthorDAO
 			session.delete(session.get(Creator.class, tempCreator.getId()));
 			
 			session.getTransaction().commit();
+			
+			return true;
 		}
 		
 		finally

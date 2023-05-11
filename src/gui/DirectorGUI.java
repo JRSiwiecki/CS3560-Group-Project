@@ -151,7 +151,12 @@ public class DirectorGUI extends JFrame {
         	tempDirector.setNationality(nationalityField.getText());
         	tempDirector.setStyle(styleField.getText());
      
-        	DirectorDAO.deleteDirector(tempDirector);
+        	boolean success = DirectorDAO.deleteDirector(tempDirector);
+        	
+        	if (!success)
+        	{
+        		JOptionPane.showMessageDialog(null, "Director: [" + tempDirector.getName() + "] can't be deleted as they are required for an item.");
+        	}
             
             clearFields();
             

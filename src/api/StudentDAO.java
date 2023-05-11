@@ -160,7 +160,7 @@ public class StudentDAO
 		}
 	}
 	
-	public static void deleteStudent(Student student)
+	public static boolean deleteStudent(Student student)
 	{
 		SessionFactory factory = new Configuration()
 				.configure("hibernate.cfg.xml")
@@ -185,6 +185,12 @@ public class StudentDAO
 			Student tempStudent = (Student) session.createQuery(hql)
 			                                    .setParameter("name", student.getName())
 			                                    .uniqueResult();
+			
+			// if student has a current loan, they can't be deleted
+			if (tempStudent.getHasCurrentLoan())
+			{
+				return false;
+			}
 
 			// Update the customer object with the correct ID
 			student.setLibraryId(tempStudent.getLibraryId());
@@ -192,6 +198,8 @@ public class StudentDAO
 			session.delete(session.get(Student.class, student.getLibraryId()));
 			
 			session.getTransaction().commit();
+			
+			return true;
 		}
 		
 		finally

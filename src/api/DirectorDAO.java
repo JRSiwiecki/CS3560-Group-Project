@@ -163,7 +163,7 @@ public class DirectorDAO
 		}
 	}
 	
-	public static void deleteDirector(Director director)
+	public static boolean deleteDirector(Director director)
 	{
 		SessionFactory factory = new Configuration()
 				.configure("hibernate.cfg.xml")
@@ -188,7 +188,24 @@ public class DirectorDAO
 			Director tempDirector = (Director) session.createQuery(hql)
 			                                    .setParameter("name", director.getName())
 			                                    .uniqueResult();
-
+			
+			
+			hql = "FROM Documentary";
+			// Retrive all documentaries
+			List<Documentary> documentaries = session.createQuery(hql, Documentary.class).getResultList();
+			
+			
+			// If there is a documentary with this director, we can't delete the director
+			for (int i = 0; i < documentaries.size(); i++)
+			{
+				Documentary currentDocumentary = documentaries.get(i);
+				
+				if (currentDocumentary.getDirector().getName().equals(tempDirector.getName()))
+				{
+					return false;
+				}
+			}
+			
 			// Update the director object with the correct ID
 			director.setId(tempDirector.getId());
 			
@@ -203,6 +220,8 @@ public class DirectorDAO
 			session.delete(session.get(Creator.class, tempCreator.getId()));
 			
 			session.getTransaction().commit();
+			
+			return true;
 		}
 		
 		finally
