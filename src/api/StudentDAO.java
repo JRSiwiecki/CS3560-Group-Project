@@ -91,6 +91,38 @@ public class StudentDAO
 		}
 	}
 	
+	public static Student readStudentByID(int libraryId)
+	{
+		SessionFactory factory = new Configuration()
+				.configure("hibernate.cfg.xml")
+				.addAnnotatedClass(Author.class)
+				.addAnnotatedClass(Book.class)
+				.addAnnotatedClass(Creator.class)
+				.addAnnotatedClass(Director.class)
+				.addAnnotatedClass(Documentary.class)
+				.addAnnotatedClass(Item.class)
+				.addAnnotatedClass(Loan.class)
+				.addAnnotatedClass(Student.class)
+				.buildSessionFactory();
+
+		Session session = factory.getCurrentSession();
+
+		try
+		{
+			session.beginTransaction();
+			
+			Student tempStudent = session.get(Student.class, libraryId);
+			
+			return tempStudent;
+		}
+		
+		finally
+		{
+			session.close();
+			factory.close();
+		}
+	}
+		
 	public static void updateStudent(Student student)
 	{
 		SessionFactory factory = new Configuration()

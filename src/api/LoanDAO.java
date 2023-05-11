@@ -129,4 +129,39 @@ public class LoanDAO
 			factory.close();
 		}
 	}
+	
+	public static Loan readLoan(int loanNumber)
+	{
+		SessionFactory factory = new Configuration()
+				.configure("hibernate.cfg.xml")
+				.addAnnotatedClass(Author.class)
+				.addAnnotatedClass(Book.class)
+				.addAnnotatedClass(Creator.class)
+				.addAnnotatedClass(Director.class)
+				.addAnnotatedClass(Documentary.class)
+				.addAnnotatedClass(Item.class)
+				.addAnnotatedClass(Loan.class)
+				.addAnnotatedClass(Student.class)
+				.buildSessionFactory();
+
+		Session session = factory.getCurrentSession();
+
+		try
+		{
+			session.beginTransaction();
+			
+			Loan tempLoan = session.get(Loan.class, loanNumber);
+			
+			session.getTransaction().commit();
+			
+			return tempLoan;
+
+		}
+		
+		finally
+		{
+			session.close();
+			factory.close();
+		}
+	}
 }

@@ -2,7 +2,15 @@ package gui;
 
 import javax.swing.*;
 
+import api.BookDAO;
+import api.DocumentaryDAO;
 import api.LoanDAO;
+import api.StudentDAO;
+import domain.Book;
+import domain.Documentary;
+import domain.Loan;
+import domain.Student;
+
 import java.awt.*;
 import java.sql.Date;
 
@@ -54,8 +62,6 @@ public class LoanGUI extends JFrame {
         itemGroup = new ButtonGroup();
         itemGroup.add(bookButton);
         itemGroup.add(documentaryButton);
-        
-        loanNumberField.setEnabled(false);
         
         receiptArea = new JTextArea(10, 40);
         receiptArea.setEditable(false);
@@ -184,6 +190,71 @@ public class LoanGUI extends JFrame {
             {
             	JOptionPane.showMessageDialog(null, "ERROR: Please select Book or Documentary.");
             }  
+        });
+        
+        // read loan
+        searchButton.addActionListener(e -> {
+        	int loanNumber = Integer.parseInt(loanNumberField.getText());
+        	
+        	Loan tempLoan = LoanDAO.readLoan(loanNumber);
+        	
+        	if (bookButton.isSelected())
+        	{
+        		Book tempBook = BookDAO.readBookByID(tempLoan.getItem().getCode());
+        		Student tempStudent = StudentDAO.readStudentByID(tempLoan.getStudent().getLibraryId());
+            	
+            	if (tempBook == null)
+            	{
+            		JOptionPane.showMessageDialog(null, "No book found!");
+            		return;
+            	}
+            	
+            	if (tempStudent == null)
+            	{
+            		JOptionPane.showMessageDialog(null, "No student found!");
+            		return;
+            	}
+            	
+            	// code of books are - 1 because their corresponding item ID 
+            	// is 1 less than the book code
+            	loanItemField.setText(tempBook.getTitle());
+            	loanStudentField.setText(tempStudent.getName());
+            	loanStartField.setText(tempLoan.getStartDate().toString());
+            	loanEndField.setText(tempLoan.getDueDate().toString());
+            	loanReturnField.setText( (tempLoan.getReturnDate() == null) ? "" : tempLoan.getReturnDate().toString());
+        	}
+        	
+        	else if (documentaryButton.isSelected())
+        	{
+        		Documentary tempDocumentary = DocumentaryDAO.readDocumentaryByID(tempLoan.getItem().getCode());
+        		Student tempStudent = StudentDAO.readStudentByID(tempLoan.getStudent().getLibraryId());
+            	
+            	if (tempDocumentary == null)
+            	{
+            		JOptionPane.showMessageDialog(null, "No documentary found!");
+            		return;
+            	}
+            	
+            	if (tempStudent == null)
+            	{
+            		JOptionPane.showMessageDialog(null, "No student found!");
+            		return;
+            	}
+            	
+            	// code of books are - 1 because their corresponding item ID 
+            	// is 1 less than the book code
+            	loanItemField.setText(tempDocumentary.getTitle());
+            	loanStudentField.setText(tempStudent.getName());
+            	loanStartField.setText(tempLoan.getStartDate().toString());
+            	loanEndField.setText(tempLoan.getDueDate().toString());
+            	loanReturnField.setText( (tempLoan.getReturnDate() == null) ? "" : tempLoan.getReturnDate().toString());
+        	}
+        	
+        	else 
+        	{
+        		JOptionPane.showMessageDialog(null, "ERROR: Please select Book or Documentary.");
+        		return;
+        	}
         });
         
     }
