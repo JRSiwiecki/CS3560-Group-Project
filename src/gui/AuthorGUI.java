@@ -154,6 +154,7 @@ public class AuthorGUI extends JFrame {
         	if (!success)
         	{
         		JOptionPane.showMessageDialog(null, "Author: [" + tempAuthor.getName() + "] can't be deleted as they are required for an item.");
+        		return;
         	}
             
             clearFields();

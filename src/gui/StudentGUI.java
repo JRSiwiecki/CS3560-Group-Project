@@ -144,6 +144,7 @@ public class StudentGUI
             if (!success)
             {
             	JOptionPane.showMessageDialog(null, "Student: [" + tempStudent.getName() + "] can't be deleted as they have an open loan.");
+            	return;
             }
             
             clearFields();

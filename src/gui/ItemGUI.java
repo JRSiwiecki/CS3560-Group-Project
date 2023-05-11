@@ -395,7 +395,13 @@ public class ItemGUI
             {
             	Book tempBook = BookDAO.readBook(titleField.getText());
             	
-            	BookDAO.deleteBook(tempBook);
+            	boolean success = BookDAO.deleteBook(tempBook);
+            	
+            	if (!success)
+            	{
+            		JOptionPane.showMessageDialog(null, "Book: [" + tempBook.getTitle() + "] can't be deleted as it is required for a loan.");
+            		return;
+            	}
             	
             	clearFields();
             	
@@ -406,7 +412,13 @@ public class ItemGUI
             {
             	Documentary tempDocumentary = DocumentaryDAO.readDocumentary(titleField.getText());
             	
-            	DocumentaryDAO.deleteDocumentary(tempDocumentary);
+            	boolean success = DocumentaryDAO.deleteDocumentary(tempDocumentary);
+            	
+            	if (!success)
+            	{
+            		JOptionPane.showMessageDialog(null, "Documentary: [" + tempDocumentary.getTitle() + "] can't be deleted as it is required for a loan.");
+            		return;
+            	}
             	
             	clearFields();
             	

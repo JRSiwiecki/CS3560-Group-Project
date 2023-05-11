@@ -156,6 +156,7 @@ public class DirectorGUI extends JFrame {
         	if (!success)
         	{
         		JOptionPane.showMessageDialog(null, "Director: [" + tempDirector.getName() + "] can't be deleted as they are required for an item.");
+        		return;
         	}
             
             clearFields();
