@@ -2,7 +2,9 @@ package gui;
 
 import javax.swing.*;
 
+import api.AuthorDAO;
 import api.BookDAO;
+import api.DirectorDAO;
 import api.DocumentaryDAO;
 import api.LoanDAO;
 import api.StudentDAO;
@@ -190,6 +192,49 @@ public class LoanGUI extends JFrame {
             {
             	JOptionPane.showMessageDialog(null, "ERROR: Please select Book or Documentary.");
             }  
+        });
+        
+        // Update loan
+        updateButton.addActionListener(e -> {
+        	
+        	Loan tempLoan = new Loan();
+        	Student tempStudent = StudentDAO.readStudent(loanStudentField.getText());
+        	
+        	tempLoan.setNumber(Integer.parseInt(loanNumberField.getText()));
+        	tempLoan.setStartDate(Date.valueOf(loanStartField.getText()));
+        	tempLoan.setDueDate(Date.valueOf(loanEndField.getText()));
+        	tempLoan.setReturnDate( (loanReturnField.getText().equals("")) ? null : Date.valueOf(loanReturnField.getText()));
+        	tempLoan.setStudent(tempStudent);
+        	
+        	if (bookButton.isSelected())
+        	{
+        		Book tempBook = BookDAO.readBook(loanItemField.getText()); 		
+        		tempLoan.setItem(tempBook);
+        		
+        		LoanDAO.updateLoan(tempLoan);
+        		
+        		clearFields();
+        		
+        		JOptionPane.showMessageDialog(null, "Loan successfully updated.");
+        	}
+        	
+        	else if (documentaryButton.isSelected())
+        	{
+        		Documentary tempDocumentary = DocumentaryDAO.readDocumentary(loanItemField.getText()); 
+        		tempLoan.setItem(tempDocumentary);
+        		
+        		LoanDAO.updateLoan(tempLoan);
+        		
+        		clearFields();
+        		
+        		JOptionPane.showMessageDialog(null, "Loan successfully updated.");
+        	}
+        	
+        	else 
+        	{
+        		JOptionPane.showMessageDialog(null, "ERROR: Please select Book or Documentary.");
+        		return;
+        	}         
         });
         
         // read loan

@@ -165,6 +165,69 @@ public class LoanDAO
 		}
 	}
 	
+	public static void updateLoan(Loan loan)
+	{
+		SessionFactory factory = new Configuration()
+				.configure("hibernate.cfg.xml")
+				.addAnnotatedClass(Author.class)
+				.addAnnotatedClass(Book.class)
+				.addAnnotatedClass(Creator.class)
+				.addAnnotatedClass(Director.class)
+				.addAnnotatedClass(Documentary.class)
+				.addAnnotatedClass(Item.class)
+				.addAnnotatedClass(Loan.class)
+				.addAnnotatedClass(Student.class)
+				.buildSessionFactory();
+
+		Session session = factory.getCurrentSession();
+
+		try
+		{
+			session.beginTransaction();
+			
+			Loan tempLoan = session.get(Loan.class, loan.getNumber());
+			Student tempStudent = session.get(Student.class, loan.getStudent().getLibraryId());
+			
+			
+			tempLoan.setStartDate(loan.getStartDate());
+			tempLoan.setDueDate(loan.getDueDate());
+			tempLoan.setStudent(tempStudent);
+			
+			// if  the loan has a return date, then set it to that and update the loan's item and student
+			if (loan.getReturnDate() != null)
+			{
+				tempLoan.setReturnDate(loan.getReturnDate());
+				tempStudent.setHasCurrentLoan(false);
+				
+				if (tempLoan.getItem().getClass().equals(Book.class))
+				{
+					Book tempBook = session.get(Book.class, tempLoan.getItem().getCode());
+					
+					tempLoan.setItem(tempBook);
+					
+					tempBook.setIsOnLoan(false);
+				}
+				
+				else 
+				{
+					Documentary tempDocumentary = session.get(Documentary.class, tempLoan.getItem().getCode());
+					
+					tempLoan.setItem(tempDocumentary);
+					
+					tempDocumentary.setIsOnLoan(false);
+				}
+			}
+				
+			session.getTransaction().commit();
+		}
+		
+		finally
+		{
+			session.close();
+			factory.close();
+		}
+	}
+	
 	public static void deleteLoan(Loan loan)
 	{
 		SessionFactory factory = new Configuration()
