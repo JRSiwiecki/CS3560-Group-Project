@@ -164,4 +164,58 @@ public class LoanDAO
 			factory.close();
 		}
 	}
+	
+	public static void deleteLoan(Loan loan)
+	{
+		SessionFactory factory = new Configuration()
+				.configure("hibernate.cfg.xml")
+				.addAnnotatedClass(Author.class)
+				.addAnnotatedClass(Book.class)
+				.addAnnotatedClass(Creator.class)
+				.addAnnotatedClass(Director.class)
+				.addAnnotatedClass(Documentary.class)
+				.addAnnotatedClass(Item.class)
+				.addAnnotatedClass(Loan.class)
+				.addAnnotatedClass(Student.class)
+				.buildSessionFactory();
+
+		Session session = factory.getCurrentSession();
+
+		try
+		{
+			session.beginTransaction();
+			
+			// delete the loan
+			Loan tempLoan = session.get(Loan.class, loan.getNumber());
+					
+			// Update student loan status and item loan status
+			Student tempStudent = session.get(Student.class, loan.getStudent().getLibraryId());
+			
+			tempStudent.setHasCurrentLoan(false);
+			
+			if (tempLoan.getItem().getClass().equals(Book.class))
+			{
+				Book tempBook = session.get(Book.class, tempLoan.getItem().getCode());
+				
+				tempBook.setIsOnLoan(false);
+			}
+			
+			else 
+			{
+				Documentary tempDocumentary = session.get(Documentary.class, tempLoan.getItem().getCode());
+				
+				tempDocumentary.setIsOnLoan(false);
+			}
+			
+			session.delete(session.get(Loan.class, tempLoan.getNumber()));
+			
+			session.getTransaction().commit();
+		}
+		
+		finally
+		{
+			session.close();
+			factory.close();
+		}
+	}
 }

@@ -198,6 +198,12 @@ public class LoanGUI extends JFrame {
         	
         	Loan tempLoan = LoanDAO.readLoan(loanNumber);
         	
+        	if (tempLoan == null)
+        	{
+        		JOptionPane.showMessageDialog(null, "No loan found!");
+        		return;
+        	}
+        	
         	if (bookButton.isSelected())
         	{
         		Book tempBook = BookDAO.readBookByID(tempLoan.getItem().getCode());
@@ -215,8 +221,6 @@ public class LoanGUI extends JFrame {
             		return;
             	}
             	
-            	// code of books are - 1 because their corresponding item ID 
-            	// is 1 less than the book code
             	loanItemField.setText(tempBook.getTitle());
             	loanStudentField.setText(tempStudent.getName());
             	loanStartField.setText(tempLoan.getStartDate().toString());
@@ -241,8 +245,6 @@ public class LoanGUI extends JFrame {
             		return;
             	}
             	
-            	// code of books are - 1 because their corresponding item ID 
-            	// is 1 less than the book code
             	loanItemField.setText(tempDocumentary.getTitle());
             	loanStudentField.setText(tempStudent.getName());
             	loanStartField.setText(tempLoan.getStartDate().toString());
@@ -257,10 +259,63 @@ public class LoanGUI extends JFrame {
         	}
         });
         
+        // Delete loan
+        deleteButton.addActionListener(e -> {
+        	
+            if (bookButton.isSelected())
+            {
+            	Book tempBook = BookDAO.readBook(loanItemField.getText());
+            	Student tempStudent = StudentDAO.readStudent(loanStudentField.getText());
+            	
+            	Loan tempLoan = new Loan();
+            	
+            	tempLoan.setNumber(Integer.parseInt(loanNumberField.getText()));
+            	tempLoan.setStartDate(Date.valueOf(loanStartField.getText()));
+            	tempLoan.setDueDate(Date.valueOf(loanEndField.getText()));
+            	tempLoan.setReturnDate((loanReturnField.getText().equals("")) ? null : Date.valueOf(loanReturnField.getText())); 
+            	tempLoan.setStudent(tempStudent);
+            	tempLoan.setItem(tempBook);
+            		
+            	LoanDAO.deleteLoan(tempLoan);
+            	
+            	clearFields();
+            	
+            	JOptionPane.showMessageDialog(null, "Loan successfully deleted.");
+            }
+            
+            else if (documentaryButton.isSelected())
+            {
+            	Documentary tempDocumentary = DocumentaryDAO.readDocumentary(loanItemField.getText());
+            	Student tempStudent = StudentDAO.readStudent(loanStudentField.getText());
+            	
+            	Loan tempLoan = new Loan();
+            	
+            	tempLoan.setNumber(Integer.parseInt(loanNumberField.getText()));
+            	tempLoan.setStartDate(Date.valueOf(loanStartField.getText()));
+            	tempLoan.setDueDate(Date.valueOf(loanEndField.getText()));
+            	tempLoan.setReturnDate((loanReturnField.getText().equals("")) ? null : Date.valueOf(loanReturnField.getText())); 
+            	tempLoan.setStudent(tempStudent);
+            	tempLoan.setItem(tempDocumentary);
+            		
+            	LoanDAO.deleteLoan(tempLoan);
+            	
+            	clearFields();
+            	
+            	JOptionPane.showMessageDialog(null, "Loan successfully deleted.");
+            }
+            
+            else 
+        	{
+        		JOptionPane.showMessageDialog(null, "ERROR: Please select Book or Documentary.");
+        		return;
+        	}    
+        });
+        
     }
     
 	public void clearFields()
 	{
+		loanNumberField.setText("");
 		loanItemField.setText("");
 		loanStudentField.setText("");
 	    loanStartField.setText("");
