@@ -307,7 +307,8 @@ public class LoanGUI extends JFrame {
         		else
         		{
         			JOptionPane.showMessageDialog(null, "Loan For Book: [" + tempBook.getTitle() + "] For Student: [" + tempStudent.getName() + "] updated."
-            				+ "\nDue Date: [" + tempLoan.getDueDate() + "]");
+            				+ "\nDue Date: [" + tempLoan.getDueDate() + "]"
+            				+ "\nTotal Price: [$" + 0.0 + "]");
         		}	       		
         	}
         	
@@ -468,20 +469,29 @@ public class LoanGUI extends JFrame {
 		LocalDateTime dueDate = loan.getDueDate().toLocalDate().atStartOfDay();
 		LocalDateTime returnDate = loan.getReturnDate().toLocalDate().atStartOfDay();
 		
+		// if they turned it in early or on time, they pay $0
+		if (returnDate.isBefore(dueDate))
+		{
+			loan.setTotalLoanPrice(0.0);
+			LoanDAO.updateLoan(loan);
+			return 0.0;
+		}
+		
 		Duration duration = Duration.between(dueDate, returnDate);
 		long days = duration.toDays();
 		
 		double loanItemPrice = loan.getItem().getDailyPrice();
-		
+
 		// totalFine is the loan item price + 10% of the price per extra day
 		double totalFine = days * (loanItemPrice + (loanItemPrice * 0.10));
+		totalFine = (totalFine < 0.0) ? 0.0 : totalFine;
 		
 		// update the loans total price
 		loan.setTotalLoanPrice(totalFine);
 		
 		LoanDAO.updateLoan(loan);
 		
-		return (totalFine < 0.0) ? 0.0 : totalFine;
+		return totalFine;
 	}
 
 	private void generateRevenueReport(String studentName, Date startDate, Date endDate)
@@ -498,6 +508,12 @@ public class LoanGUI extends JFrame {
         	Loan currentLoan = loans.get(i);
         	String currentStudentName = currentLoan.getStudent().getName();
         	Date currentReturnDate = currentLoan.getReturnDate();
+        	
+        	// if the item hasn't even been returned, don't bother
+        	if (currentReturnDate == null)
+        	{
+        		continue;
+        	}
         	
         	// if the current student is not the student we are looking for, we don't care
         	if (!currentStudentName.equals(studentName))
