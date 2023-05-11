@@ -15,6 +15,7 @@ import domain.Student;
 
 import java.awt.*;
 import java.sql.Date;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class LoanGUI extends JFrame {
@@ -22,7 +23,7 @@ public class LoanGUI extends JFrame {
     // components
     private JLabel loanNumberLabel, loanItemLabel, loanStudentLabel, loanStartLabel, loanEndLabel, loanReturnLabel;
     private JTextField loanNumberField, loanItemField, loanStudentField, loanStartField, loanEndField, loanReturnField;
-    private JButton enterButton, searchButton, updateButton, deleteButton;
+    private JButton enterButton, searchButton, updateButton, deleteButton, displayOverDueLoansButton;
     private JTextArea receiptArea;
     private JRadioButton bookButton, documentaryButton;
     private ButtonGroup itemGroup;
@@ -55,6 +56,7 @@ public class LoanGUI extends JFrame {
         searchButton = new JButton("Search");
         updateButton = new JButton("Update");
         deleteButton = new JButton("Delete");
+        displayOverDueLoansButton = new JButton("Display Overdue Loans");
         
         // Create radio buttons
         bookButton = new JRadioButton("Book");
@@ -150,8 +152,12 @@ public class LoanGUI extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 8;
         gbc.gridwidth = 4;
-        add(scrollPane, gbc);  
+        add(scrollPane, gbc);   
         
+        gbc.gridx = 1;
+        gbc.gridy = 9;
+        add(displayOverDueLoansButton, gbc);
+
         // Create loan
         enterButton.addActionListener(e -> {
         	String itemName = loanItemField.getText();
@@ -356,6 +362,11 @@ public class LoanGUI extends JFrame {
         	}    
         });
         
+        // display overdue loans button
+        displayOverDueLoansButton.addActionListener(e -> {
+        	displayOverDueLoans();
+        });
+        
     }
     
 	public void clearFields()
@@ -365,8 +376,21 @@ public class LoanGUI extends JFrame {
 		loanStudentField.setText("");
 	    loanStartField.setText("");
 	    loanEndField.setText("");
-	    loanReturnField.setText("");
+	    loanReturnField.setText("");	
 	    receiptArea.setText("");
+	}
+	
+	public void displayOverDueLoans()
+	{
+		List<Loan> overDueLoans = LoanDAO.getOverdueLoans();
+        String overDueLoansText = "";
+        
+        for (int i = 0; i < overDueLoans.size(); i++)
+        {
+        	overDueLoansText += overDueLoans.get(i) + "\n";
+        }
+        
+        receiptArea.setText(overDueLoansText);
 	}
     
     public void showWindow()

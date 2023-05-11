@@ -3,6 +3,7 @@ package api;
 import domain.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -273,6 +274,45 @@ public class LoanDAO
 			session.delete(session.get(Loan.class, tempLoan.getNumber()));
 			
 			session.getTransaction().commit();
+		}
+		
+		finally
+		{
+			session.close();
+			factory.close();
+		}
+	}
+	
+	public static List<Loan> getOverdueLoans()
+	{
+		SessionFactory factory = new Configuration()
+				.configure("hibernate.cfg.xml")
+				.addAnnotatedClass(Author.class)
+				.addAnnotatedClass(Book.class)
+				.addAnnotatedClass(Creator.class)
+				.addAnnotatedClass(Director.class)
+				.addAnnotatedClass(Documentary.class)
+				.addAnnotatedClass(Item.class)
+				.addAnnotatedClass(Loan.class)
+				.addAnnotatedClass(Student.class)
+				.buildSessionFactory();
+
+		Session session = factory.getCurrentSession();
+
+		try
+		{
+			session.beginTransaction();
+			
+			// need to use the Class name, not table name
+			String hql = "FROM Loan WHERE return_date is null";
+			
+			
+			@SuppressWarnings("unchecked")
+			List<Loan> tempLoans = session.createQuery(hql).list();
+			
+			session.getTransaction().commit();
+			
+			return tempLoans;
 		}
 		
 		finally
