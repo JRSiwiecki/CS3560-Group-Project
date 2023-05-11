@@ -482,8 +482,8 @@ public class LoanGUI extends JFrame {
 		
 		double loanItemPrice = loan.getItem().getDailyPrice();
 
-		// totalFine is the loan item price + 10% of the price per extra day
-		double totalFine = days * (loanItemPrice + (loanItemPrice * 0.10));
+		// totalFine is the loan item price + (10% of the price per extra day)
+		double totalFine =  (loanItemPrice + (days * (loanItemPrice * 0.10)));
 		totalFine = (totalFine < 0.0) ? 0.0 : totalFine;
 		
 		// update the loans total price
