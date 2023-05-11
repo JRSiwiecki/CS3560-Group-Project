@@ -30,6 +30,9 @@ public class Loan
 	@JoinColumn(name="item_id")
 	private Item item;
 	
+	@Column(name="total_loan_price")
+	private double totalLoanPrice;
+	
 	public Loan(int number, Date startDate, Date dueDate, Student student, Item item)
 	{
 		this.number = number;
@@ -92,6 +95,16 @@ public class Loan
 	public void setItem(Item item)
 	{
 		this.item = item;
+	}
+
+	public double getTotalLoanPrice()
+	{
+		return totalLoanPrice;
+	}
+
+	public void setTotalLoanPrice(double totalLoanPrice)
+	{
+		this.totalLoanPrice = totalLoanPrice;
 	}
 
 	@Override

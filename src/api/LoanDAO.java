@@ -3,7 +3,6 @@ package api;
 import domain.*;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -193,6 +192,7 @@ public class LoanDAO
 			tempLoan.setStartDate(loan.getStartDate());
 			tempLoan.setDueDate(loan.getDueDate());
 			tempLoan.setStudent(tempStudent);
+			tempLoan.setTotalLoanPrice(loan.getTotalLoanPrice());
 			
 			// if  the loan has a return date, then set it to that and update the loan's item and student
 			if (loan.getReturnDate() != null)
@@ -309,6 +309,43 @@ public class LoanDAO
 			
 			@SuppressWarnings("unchecked")
 			List<Loan> tempLoans = session.createQuery(hql).list();
+			
+			session.getTransaction().commit();
+			
+			return tempLoans;
+		}
+		
+		finally
+		{
+			session.close();
+			factory.close();
+		}
+	}
+	
+	public static List<Loan> getAllLoans()
+	{
+		SessionFactory factory = new Configuration()
+				.configure("hibernate.cfg.xml")
+				.addAnnotatedClass(Author.class)
+				.addAnnotatedClass(Book.class)
+				.addAnnotatedClass(Creator.class)
+				.addAnnotatedClass(Director.class)
+				.addAnnotatedClass(Documentary.class)
+				.addAnnotatedClass(Item.class)
+				.addAnnotatedClass(Loan.class)
+				.addAnnotatedClass(Student.class)
+				.buildSessionFactory();
+
+		Session session = factory.getCurrentSession();
+
+		try
+		{
+			session.beginTransaction();
+			
+			// need to use the Class name, not table name
+			String hql = "FROM Loan";
+			
+			List<Loan> tempLoans = session.createQuery(hql, Loan.class).getResultList();
 			
 			session.getTransaction().commit();
 			

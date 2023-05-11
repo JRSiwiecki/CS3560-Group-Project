@@ -2,17 +2,8 @@ package gui;
 
 import javax.swing.*;
 
-import api.AuthorDAO;
-import api.BookDAO;
-import api.DirectorDAO;
-import api.DocumentaryDAO;
-import api.LoanDAO;
-import api.StudentDAO;
-import domain.Book;
-import domain.Documentary;
-import domain.Item;
-import domain.Loan;
-import domain.Student;
+import api.*;
+import domain.*;
 
 import java.awt.*;
 import java.sql.Date;
@@ -27,7 +18,7 @@ public class LoanGUI extends JFrame {
     // components
     private JLabel loanNumberLabel, loanItemLabel, loanStudentLabel, loanStartLabel, loanEndLabel, loanReturnLabel;
     private JTextField loanNumberField, loanItemField, loanStudentField, loanStartField, loanEndField, loanReturnField;
-    private JButton enterButton, searchButton, updateButton, deleteButton, displayOpenLoansButton, displayOverDueLoansButton;
+    private JButton enterButton, searchButton, updateButton, deleteButton, displayOpenLoansButton, displayOverDueLoansButton, generateRevenueReportButton;
     private JTextArea receiptArea;
     private JRadioButton bookButton, documentaryButton;
     private ButtonGroup itemGroup;
@@ -62,6 +53,7 @@ public class LoanGUI extends JFrame {
         deleteButton = new JButton("Delete");
         displayOpenLoansButton = new JButton("Display Open Loans");
         displayOverDueLoansButton = new JButton("Display Overdue Loans");
+        generateRevenueReportButton = new JButton("Generate Revenue Report For Student & Time Interval");
         
         // Create radio buttons
         bookButton = new JRadioButton("Book");
@@ -163,9 +155,13 @@ public class LoanGUI extends JFrame {
         gbc.gridy = 9;
         add(displayOpenLoansButton, gbc);
         
-        gbc.gridx = 3;
+        gbc.gridx = 2;
         gbc.gridy = 9;
         add(displayOverDueLoansButton, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 10;
+        add(generateRevenueReportButton, gbc);
 
         // Create loan
         enterButton.addActionListener(e -> {
@@ -409,25 +405,16 @@ public class LoanGUI extends JFrame {
         	displayOverDueLoans();
         });
         
+        generateRevenueReportButton.addActionListener(e -> {
+        	String studentName = loanStudentField.getText();
+        	Date startDate = Date.valueOf(loanStartField.getText());
+        	Date endDate = Date.valueOf(loanEndField.getText());
+        	
+        	generateRevenueReport(studentName, startDate, endDate);
+        });
+        
     }
     
-	private double calculateFine(Loan loan)
-	{
-		// Calculate number of days after the due date until the book was returned
-		LocalDateTime dueDate = loan.getDueDate().toLocalDate().atStartOfDay();
-		LocalDateTime returnDate = loan.getReturnDate().toLocalDate().atStartOfDay();
-		
-		Duration duration = Duration.between(dueDate, returnDate);
-		long days = duration.toDays();
-		
-		double loanItemPrice = loan.getItem().getDailyPrice();
-		
-		// totalFine is the loan item price + 10% of the price per extra day
-		double totalFine = days * (loanItemPrice + (loanItemPrice * 0.10));
-		
-		return (totalFine < 0.0) ? 0.0 : totalFine;
-	}
-
 	private void clearFields()
 	{
 		loanNumberField.setText("");
@@ -470,11 +457,69 @@ public class LoanGUI extends JFrame {
         	{
         		overDueLoansText += currentLoan + "\n";
         	}
-        	
-        	receiptArea.setText(overDueLoansText);
         }
         
         receiptArea.setText(overDueLoansText);
+	}
+	
+	private double calculateFine(Loan loan)
+	{
+		// Calculate number of days after the due date until the book was returned
+		LocalDateTime dueDate = loan.getDueDate().toLocalDate().atStartOfDay();
+		LocalDateTime returnDate = loan.getReturnDate().toLocalDate().atStartOfDay();
+		
+		Duration duration = Duration.between(dueDate, returnDate);
+		long days = duration.toDays();
+		
+		double loanItemPrice = loan.getItem().getDailyPrice();
+		
+		// totalFine is the loan item price + 10% of the price per extra day
+		double totalFine = days * (loanItemPrice + (loanItemPrice * 0.10));
+		
+		// update the loans total price
+		loan.setTotalLoanPrice(totalFine);
+		
+		LoanDAO.updateLoan(loan);
+		
+		return (totalFine < 0.0) ? 0.0 : totalFine;
+	}
+
+	private void generateRevenueReport(String studentName, Date startDate, Date endDate)
+	{
+		// Get all loans first
+		List<Loan> loans = LoanDAO.getAllLoans();
+        String revenueReportText = "Revenue Info For: [" + studentName + "] for Period: [" + startDate + " to " + endDate + "]";
+        
+        double totalPayments = 0.0;
+        
+        // Check if the current loan has our student, and if its in between the period we are checking
+        for (int i = 0; i < loans.size(); i++)
+        {
+        	Loan currentLoan = loans.get(i);
+        	String currentStudentName = currentLoan.getStudent().getName();
+        	Date currentReturnDate = currentLoan.getReturnDate();
+        	
+        	// if the current student is not the student we are looking for, we don't care
+        	if (!currentStudentName.equals(studentName))
+        	{
+        		continue;
+        	}
+        	
+        	// if the current date is not what we are looking for, we don't care
+        	if ( !(currentReturnDate.after(startDate) && currentReturnDate.before(endDate)) )
+        	{
+        		continue;
+        	}
+        	
+        	double currentLoanPayment = currentLoan.getTotalLoanPrice();
+        	totalPayments += currentLoanPayment;
+        	
+        	revenueReportText += "\n\tPayment of: [$" + currentLoanPayment + "] on Date: [" + currentReturnDate + "]";
+        }
+        
+        revenueReportText += "\nTotal Payments: [$" + totalPayments + "]"; 
+        
+        receiptArea.setText(revenueReportText);
 	}
     
     public void showWindow()
