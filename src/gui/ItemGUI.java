@@ -5,6 +5,7 @@ import domain.*;
 
 import javax.swing.*;
 import java.sql.Date;
+import java.util.List;
 
 public class ItemGUI
 {
@@ -19,6 +20,8 @@ public class ItemGUI
     JTextField locationField;
     JTextField dailyPriceField;
     JTextField creatorField;
+    JTextField availabilityField;
+    JTextField dueDateField;
     
     // Book fields
     JRadioButton bookButton;
@@ -52,6 +55,8 @@ public class ItemGUI
         JLabel locationLabel = new JLabel("Location");
         JLabel dailyPriceLabel = new JLabel("Daily Price ($)");
         JLabel creatorLabel = new JLabel("Creator Name");
+        JLabel availabilityLabel = new JLabel("Has Current Loan");
+        JLabel dueDateLabel = new JLabel("Due Date");
         
         // Book related labels
         JLabel bookLabel = new JLabel("Book");
@@ -72,6 +77,8 @@ public class ItemGUI
         locationField = new JTextField(20);
         dailyPriceField = new JTextField(20);
         creatorField = new JTextField(20);
+        availabilityField = new JTextField(20);
+        dueDateField = new JTextField(20);
         
         // Book related text fields
         pagesField = new JTextField(20);
@@ -133,7 +140,20 @@ public class ItemGUI
         dailyPriceField.setBounds(675, 200, 100, 25);
         panel.add(dailyPriceLabel);
         panel.add(dailyPriceField);
-           
+        
+        // Add availability components
+        availabilityLabel.setBounds(800, 175, 100, 25);
+        availabilityField.setBounds(800, 200, 100, 25);
+        availabilityField.setEnabled(false);
+        panel.add(availabilityLabel);
+        panel.add(availabilityField);
+        
+        // Add item due date components
+        dueDateLabel.setBounds(675, 225, 100, 25);
+        dueDateField.setBounds(675, 250, 225, 25);
+        dueDateField.setEnabled(false);
+        panel.add(dueDateLabel);
+        panel.add(dueDateField);
         
         // Add book components
         bookButton.setBounds(25, 277, 20, 20);
@@ -257,6 +277,8 @@ public class ItemGUI
         readButton.addActionListener(e -> {
         	String title = titleField.getText();
         	
+        	clearFields();
+        	
         	if (bookButton.isSelected())
         	{
         		Book tempBook = BookDAO.readBook(title);
@@ -275,6 +297,8 @@ public class ItemGUI
             	locationField.setText(tempBook.getLocation());
             	creatorField.setText(tempBook.getAuthor().getName());
             	dailyPriceField.setText(String.valueOf(tempBook.getDailyPrice())); 
+            	availabilityField.setText(String.valueOf(tempBook.getIsOnLoan()));
+            	dueDateField.setText(getLoanDueDateForItem(tempBook));
             	pagesField.setText(String.valueOf(tempBook.getPages()));
             	publisherField.setText(tempBook.getPublisher());
             	publicationDateField.setText(tempBook.getPublicationDate().toString());
@@ -298,6 +322,8 @@ public class ItemGUI
             	locationField.setText(tempDocumentary.getLocation());
             	creatorField.setText(tempDocumentary.getDirector().getName());
             	dailyPriceField.setText(String.valueOf(tempDocumentary.getDailyPrice()));
+            	availabilityField.setText(String.valueOf(tempDocumentary.getIsOnLoan()));
+            	dueDateField.setText(getLoanDueDateForItem(tempDocumentary));
             	lengthField.setText(String.valueOf(tempDocumentary.getLength()));
             	releaseDateField.setText(tempDocumentary.getReleaseDate().toString());
         	}
@@ -395,6 +421,23 @@ public class ItemGUI
         });
     }
 	
+	public String getLoanDueDateForItem(Item item)
+	{
+		List<Loan> openLoans = LoanDAO.getOpenLoans();
+		
+		for (int i = 0; i < openLoans.size(); i++)
+		{
+			Loan currentLoan = openLoans.get(i);
+			
+			if (currentLoan.getItem().getTitle().equals(item.getTitle()))
+			{
+				return currentLoan.getDueDate().toString(); 
+			}
+		}
+		
+		return "";
+	}
+	
 	public void showWindow()
 	{
 		frame.setVisible(true);
@@ -408,6 +451,8 @@ public class ItemGUI
 	    locationField.setText("");
 	    creatorField.setText("");
 	    dailyPriceField.setText("");
+	    availabilityField.setText("");
+	    dueDateField.setText("");
 	    pagesField.setText("");
 	    publisherField.setText("");
 	    publicationDateField.setText("");
