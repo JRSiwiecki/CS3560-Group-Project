@@ -158,7 +158,7 @@ public class LoanGUI extends JFrame {
             	 
             	 if (!success)
             	 {
-            		 JOptionPane.showMessageDialog(null, "Book: [" + itemName + "] is already on loan!");
+            		 JOptionPane.showMessageDialog(null, "Book: [" + itemName + "] either may not exist, is already on loan, or the student already has an open loan!");
                 	 return;
             	 }
             		 
@@ -171,10 +171,10 @@ public class LoanGUI extends JFrame {
             	boolean success = LoanDAO.createLoan(itemName, studentName, startDate, endDate, false);
             	
             	if (!success)
-           	 	{
-           		 JOptionPane.showMessageDialog(null, "Documentary: [" + itemName + "] is already on loan!");
+           	 {
+           		 JOptionPane.showMessageDialog(null, "Documentary: [" + itemName + "] either may not exist, is already on loan, or the student already has an open loan!");
                	 return;
-           	 	}
+           	 }
             	
             	JOptionPane.showMessageDialog(null, "Loan For Documentary: [" + itemName + "] successfully added.");
            	 	clearFields();

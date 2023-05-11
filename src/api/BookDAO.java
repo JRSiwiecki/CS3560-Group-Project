@@ -144,7 +144,7 @@ public class BookDAO
 			tempItem.setLocation(book.getLocation());
 			tempItem.setDailyPrice(book.getDailyPrice());
 			tempItem.setIsOnLoan(book.getIsOnLoan());
-		
+			
 			Book tempBook = session.get(Book.class, itemCode);
 			
 			tempBook.setTitle(book.getTitle());
@@ -156,14 +156,6 @@ public class BookDAO
 			tempBook.setPublisher(book.getPublisher());
 			tempBook.setPublicationDate(book.getPublicationDate());
 			tempBook.setAuthor(book.getAuthor());
-			
-			// Retrieve the item from the database using their itemCode
-//			String hql = "FROM Item WHERE code=:code";
-//			Item tempItem = (Item) session.createQuery(hql)
-//			                                    .setParameter("code", itemCode)
-//			                                    .uniqueResult();
-					
-			// seems that you still need to grab it with the itemCode, not bookCode
 				
 			// Update book entry first
 //			hql = "UPDATE Book SET title=:title, description=:description, location=:location, daily_price=:dailyPrice, is_on_loan=:isOnLoan, pages=:pages, publisher=:publisher, publication_date=:publicationDate, author_id=:authorId WHERE code=:code";

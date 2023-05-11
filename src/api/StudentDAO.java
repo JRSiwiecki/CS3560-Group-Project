@@ -111,25 +111,32 @@ public class StudentDAO
 		{
 			session.beginTransaction();
 			
-			// Retrieve the student from the database using their id
-			String hql = "FROM Student WHERE library_id=:library_id";
-			Student tempStudent = (Student) session.createQuery(hql)
-			                                    .setParameter("library_id", student.getLibraryId())
-			                                    .uniqueResult();
+			Student tempStudent = session.get(Student.class, student.getLibraryId());
 			
-			tempStudent = session.get(Student.class, tempStudent.getLibraryId());
-					
-			// Update the student object with the correct ID
-			student.setLibraryId(tempStudent.getLibraryId());
+			tempStudent.setBroncoId(student.getBroncoId());
+			tempStudent.setName(student.getName());
+			tempStudent.setCourse(student.getCourse());
+			tempStudent.setHasCurrentLoan(student.getHasCurrentLoan());
 			
-			hql = "UPDATE Student SET name=:name, bronco_id=:broncoId, course=:course WHERE id=:id";
-			
-			session.createQuery(hql)
-				.setParameter("name", student.getName())
-				.setParameter("broncoId", student.getBroncoId())
-				.setParameter("course", student.getCourse())
-				.setParameter("id", student.getLibraryId())
-				.executeUpdate();
+//			// Retrieve the student from the database using their id
+//			String hql = "FROM Student WHERE library_id=:library_id";
+//			Student tempStudent = (Student) session.createQuery(hql)
+//			                                    .setParameter("library_id", student.getLibraryId())
+//			                                    .uniqueResult();
+//			
+//			tempStudent = session.get(Student.class, tempStudent.getLibraryId());
+//					
+//			// Update the student object with the correct ID
+//			student.setLibraryId(tempStudent.getLibraryId());
+//			
+//			hql = "UPDATE Student SET name=:name, bronco_id=:broncoId, course=:course WHERE id=:id";
+//			
+//			session.createQuery(hql)
+//				.setParameter("name", student.getName())
+//				.setParameter("broncoId", student.getBroncoId())
+//				.setParameter("course", student.getCourse())
+//				.setParameter("id", student.getLibraryId())
+//				.executeUpdate();
 			
 			session.getTransaction().commit();
 		}

@@ -34,18 +34,28 @@ public class LoanDAO
 			Loan tempLoan = new Loan();
 		
 			Student tempStudent = StudentDAO.readStudent(studentName);
+			
+			if (tempStudent == null)
+			{
+				return false;
+			}
 		
 			Documentary tempDocumentary;
 			Book tempBook;
 			
 			tempLoan.setStartDate(startDate);
 			tempLoan.setDueDate(endDate);
-			tempLoan.setStudent(tempStudent);
 			
 			// If the loan item is a book, create the book
 			if (itemIsBook)
 			{
 				tempBook = BookDAO.readBook(itemName);
+				
+				// if the book doesn't exist, there is nothing to loan!
+				if (tempBook == null)
+				{
+					return false;
+				}
 				
 				// if the book is already on loan, then we can't check it out!
 				if (tempBook.getIsOnLoan())
@@ -53,9 +63,19 @@ public class LoanDAO
 					return false;
 				}
 				
+				// if the student already has an open loan, they can't check out the item!
+				if (tempStudent.getHasCurrentLoan())
+				{
+					return false;
+				}
+				
+				tempStudent.setHasCurrentLoan(true);
+				
 				tempBook.setIsOnLoan(true);
+				tempLoan.setStudent(tempStudent);
 				
 				BookDAO.updateBook(tempBook);
+				StudentDAO.updateStudent(tempStudent);
 				
 				tempLoan.setItem(tempBook);
 				
@@ -66,15 +86,31 @@ public class LoanDAO
 			{
 				tempDocumentary = DocumentaryDAO.readDocumentary(itemName);
 				
+				// if the book doesn't exist, there is nothing to loan!
+				if (tempDocumentary == null)
+				{
+					return false;
+				}
+				
 				// if the documentary is already on loan, then we can't check it out!
 				if (tempDocumentary.getIsOnLoan())
 				{
 					return false;
 				}
 				
+				// if the student already has an open loan, they can't check out the item!
+				if (tempStudent.getHasCurrentLoan())
+				{
+					return false;
+				}
+				
+				tempStudent.setHasCurrentLoan(true);
+				
 				tempDocumentary.setIsOnLoan(true);
+				tempLoan.setStudent(tempStudent);
 				
 				DocumentaryDAO.updateDocumentary(tempDocumentary);
+				StudentDAO.updateStudent(tempStudent);
 				
 				tempLoan.setItem(tempDocumentary);
 			}		

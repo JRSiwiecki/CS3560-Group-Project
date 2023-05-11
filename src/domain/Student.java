@@ -23,6 +23,9 @@ public class Student
 	@Column(name="course")
 	private String course;
 	
+	@Column(name="has_current_loan")
+	private boolean hasCurrentLoan;
+	
 	public Student(String broncoId, String name, String course)
 	{
 		this.broncoId = broncoId;
@@ -68,6 +71,16 @@ public class Student
 	public void setCourse(String course)
 	{
 		this.course = course;
+	}
+	
+	public boolean getHasCurrentLoan()
+	{
+		return hasCurrentLoan;
+	}
+
+	public void setHasCurrentLoan(boolean hasCurrentLoan)
+	{
+		this.hasCurrentLoan = hasCurrentLoan;
 	}
 
 	@Override

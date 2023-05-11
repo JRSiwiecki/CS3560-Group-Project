@@ -316,7 +316,7 @@ public class ItemGUI
         	{
         		Book tempBook = new Book();
         		
-        		tempBook.setCode(Integer.parseInt(codeField.getText()));
+        		tempBook.setCode(Integer.parseInt(codeField.getText()) + 1);
         		tempBook.setTitle(titleField.getText());
         		tempBook.setDescription(descriptionField.getText());
         		tempBook.setLocation(locationField.getText());
@@ -336,7 +336,23 @@ public class ItemGUI
         	
         	else if (documentaryButton.isSelected())
         	{
+        		Documentary tempDocumentary = new Documentary();
         		
+        		tempDocumentary.setCode(Integer.parseInt(codeField.getText()) + 1);
+        		tempDocumentary.setTitle(titleField.getText());
+        		tempDocumentary.setDescription(descriptionField.getText());
+        		tempDocumentary.setLocation(locationField.getText());
+        		tempDocumentary.setDailyPrice(Double.parseDouble(dailyPriceField.getText()));
+        		tempDocumentary.setIsOnLoan(DocumentaryDAO.readDocumentary(titleField.getText()).getIsOnLoan());
+        		tempDocumentary.setLength(Integer.parseInt(lengthField.getText())); 
+        		tempDocumentary.setReleaseDate(Date.valueOf(releaseDateField.getText())); 
+        		tempDocumentary.setDirector(DirectorDAO.readDirector(creatorField.getText()));
+        		
+        		DocumentaryDAO.updateDocumentary(tempDocumentary);
+        		
+        		clearFields();
+        		
+        		JOptionPane.showMessageDialog(null, "Documentary: [" + tempDocumentary.getTitle() + "] successfully updated.");
         	}
         	
         	else 
