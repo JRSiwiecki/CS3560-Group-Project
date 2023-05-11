@@ -283,7 +283,7 @@ public class LoanDAO
 		}
 	}
 	
-	public static List<Loan> getOverdueLoans()
+	public static List<Loan> getOpenLoans()
 	{
 		SessionFactory factory = new Configuration()
 				.configure("hibernate.cfg.xml")

@@ -15,6 +15,7 @@ import domain.Student;
 
 import java.awt.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @SuppressWarnings("serial")
@@ -23,7 +24,7 @@ public class LoanGUI extends JFrame {
     // components
     private JLabel loanNumberLabel, loanItemLabel, loanStudentLabel, loanStartLabel, loanEndLabel, loanReturnLabel;
     private JTextField loanNumberField, loanItemField, loanStudentField, loanStartField, loanEndField, loanReturnField;
-    private JButton enterButton, searchButton, updateButton, deleteButton, displayOverDueLoansButton;
+    private JButton enterButton, searchButton, updateButton, deleteButton, displayOpenLoansButton, displayOverDueLoansButton;
     private JTextArea receiptArea;
     private JRadioButton bookButton, documentaryButton;
     private ButtonGroup itemGroup;
@@ -56,6 +57,7 @@ public class LoanGUI extends JFrame {
         searchButton = new JButton("Search");
         updateButton = new JButton("Update");
         deleteButton = new JButton("Delete");
+        displayOpenLoansButton = new JButton("Display Open Loans");
         displayOverDueLoansButton = new JButton("Display Overdue Loans");
         
         // Create radio buttons
@@ -154,7 +156,11 @@ public class LoanGUI extends JFrame {
         gbc.gridwidth = 4;
         add(scrollPane, gbc);   
         
-        gbc.gridx = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 9;
+        add(displayOpenLoansButton, gbc);
+        
+        gbc.gridx = 3;
         gbc.gridy = 9;
         add(displayOverDueLoansButton, gbc);
 
@@ -362,6 +368,11 @@ public class LoanGUI extends JFrame {
         	}    
         });
         
+        // display all loans button
+        displayOpenLoansButton.addActionListener(e -> {
+        	displayOpenLoans();
+        });
+        
         // display overdue loans button
         displayOverDueLoansButton.addActionListener(e -> {
         	displayOverDueLoans();
@@ -380,14 +391,39 @@ public class LoanGUI extends JFrame {
 	    receiptArea.setText("");
 	}
 	
+	// Display any loans that are either still open or are overdue
+	public void displayOpenLoans()
+	{
+		List<Loan> overDueLoans = LoanDAO.getOpenLoans();
+        String loansText = "";
+        
+        for (int i = 0; i < overDueLoans.size(); i++)
+        {
+        	loansText += overDueLoans.get(i) + "\n";
+        }
+        
+        receiptArea.setText(loansText);
+	}
+	
+	// Display all loans that are overdue
 	public void displayOverDueLoans()
 	{
-		List<Loan> overDueLoans = LoanDAO.getOverdueLoans();
+		List<Loan> overDueLoans = LoanDAO.getOpenLoans();
         String overDueLoansText = "";
         
         for (int i = 0; i < overDueLoans.size(); i++)
         {
-        	overDueLoansText += overDueLoans.get(i) + "\n";
+        	Loan currentLoan = overDueLoans.get(i);
+
+        	// Convert to java.sql.Date
+        	Date currentDate = Date.valueOf(LocalDate.now());
+        	
+        	if (currentDate.compareTo(currentLoan.getDueDate()) > 0)
+        	{
+        		overDueLoansText += currentLoan + "\n";
+        	}
+        	
+        	receiptArea.setText(overDueLoansText);
         }
         
         receiptArea.setText(overDueLoansText);
