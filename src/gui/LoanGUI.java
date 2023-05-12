@@ -174,6 +174,7 @@ public class LoanGUI extends JFrame {
             if (bookButton.isSelected())
             {
             	 boolean success = LoanDAO.createLoan(itemName, studentName, startDate, endDate, true);
+            	 Book tempBook = BookDAO.readBook(itemName);
             	 
             	 if (!success)
             	 {
@@ -182,13 +183,17 @@ public class LoanGUI extends JFrame {
             	 }
             		 
             	 JOptionPane.showMessageDialog(null, "Loan For Book: [" + itemName + "] For Student: [" + studentName + "] created."
-         				+ "\nDue Date: [" + endDate + "]");
+            			 + "\nStart Date: [" + startDate + "]"
+     					+ "\nDue Date: [" + endDate + "]"
+     					+ "\nTotal Price will be [$" + tempBook.getDailyPrice() + "] plus [$" + (tempBook.getDailyPrice() * 0.10) + "] per day the item is overdue.");
+            	 
             	 clearFields();
             }
                       
             else if (documentaryButton.isSelected())
             {
             	boolean success = LoanDAO.createLoan(itemName, studentName, startDate, endDate, false);
+            	Documentary tempDocumentary = DocumentaryDAO.readDocumentary(itemName);
             	
             	if (!success)
            	 {
@@ -197,8 +202,11 @@ public class LoanGUI extends JFrame {
            	 }
             	
             	JOptionPane.showMessageDialog(null, "Loan For Documentary: [" + itemName + "] For Student: [" + studentName + "] created."
-        				+ "\nDue Date: [" + endDate + "]");
-           	 	clearFields();
+            			+ "\nStart Date: [" + startDate + "]"
+    					+ "\nDue Date: [" + endDate + "]"
+    					+ "\nTotal Price will be [$" + tempDocumentary.getDailyPrice() + "] plus [$" + (tempDocumentary.getDailyPrice() * 0.10) + "] per day the item is overdue.");
+           	 	
+            	clearFields();
             }
             
             else 
@@ -300,15 +308,18 @@ public class LoanGUI extends JFrame {
         			double totalFine = calculateFine(tempLoan);
 
         			JOptionPane.showMessageDialog(null, "Loan For Book: [" + tempBook.getTitle() + "] For Student: [" + tempStudent.getName() + "] updated."
-            				+ "\nDue Date: [" + tempLoan.getDueDate() + "]"
+            				+ "\nStart Date: [" + tempLoan.getStartDate() + "]"
+        					+ "\nDue Date: [" + tempLoan.getDueDate() + "]"
+        					+ "\nReturn Date: [" + tempLoan.getReturnDate() + "]"
             				+ "\nTotal Price: [$" + String.valueOf(totalFine) + "]");
         		}
         		
         		else
-        		{
+        		{  			
         			JOptionPane.showMessageDialog(null, "Loan For Book: [" + tempBook.getTitle() + "] For Student: [" + tempStudent.getName() + "] updated."
-            				+ "\nDue Date: [" + tempLoan.getDueDate() + "]"
-            				+ "\nTotal Price: [$" + 0.0 + "]");
+        					+ "\nStart Date: [" + tempLoan.getStartDate() + "]"
+        					+ "\nDue Date: [" + tempLoan.getDueDate() + "]"
+            				+ "\nTotal Price will be [$" + tempLoan.getItem().getDailyPrice() + "] plus [$" + (tempLoan.getItem().getDailyPrice() * 0.10) + "] per day the item is overdue.");
         		}	       		
         	}
         	
@@ -326,14 +337,18 @@ public class LoanGUI extends JFrame {
         			double totalFine = calculateFine(tempLoan);
 
         			JOptionPane.showMessageDialog(null, "Loan For Documentary: [" + tempDocumentary.getTitle() + "] For Student: [" + tempStudent.getName() + "] updated."
-            				+ "\nDue Date: [" + tempLoan.getDueDate() + "]"
+        					+ "\nStart Date: [" + tempLoan.getStartDate() + "]"
+        					+ "\nDue Date: [" + tempLoan.getDueDate() + "]"
+        					+ "\nReturn Date: [" + tempLoan.getReturnDate() + "]"
             				+ "\nTotal Price: [$" + String.valueOf(totalFine) + "]");
         		}
         		
         		else
         		{
-        			JOptionPane.showMessageDialog(null, "Loan For Book: [" + tempDocumentary.getTitle() + "] For Student: [" + tempStudent.getName() + "] updated."
-            				+ "\nDue Date: [" + tempLoan.getDueDate() + "]");
+        			JOptionPane.showMessageDialog(null, "Loan For Documentary: [" + tempDocumentary.getTitle() + "] For Student: [" + tempStudent.getName() + "] updated."
+        					+ "\nStart Date: [" + tempLoan.getStartDate() + "]"
+        					+ "\nDue Date: [" + tempLoan.getDueDate() + "]"
+        					+ "\nTotal Price will be [$" + tempLoan.getItem().getDailyPrice() + "] plus [$" + (tempLoan.getItem().getDailyPrice() * 0.10) + "] per day the item is overdue.");
         		}	 
         	}
         	
